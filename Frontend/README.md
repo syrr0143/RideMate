@@ -1,9 +1,9 @@
-landing page 
+landing page
 sign up page ( user and captain)
 login page(user and captain)
 accept policy page (optional)
-usecontext 
+usecontext
 
-link all the routes and do routing 
+link all the routes and do routing
 
-3 hr 09 min
+3 hr 48 min

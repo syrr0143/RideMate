@@ -4,22 +4,31 @@ import {
   decodeTokenWithoutVerify,
 } from "../utils/auth.utils.js";
 import captainModel from "../model/Captain.model.js";
+import { AppError } from "../utils/errorHandler.utils.js";
 
 const authenticate = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1] || req.cookies.token; //TODO dont forget to add cookie while login
+  const token =
+    req.headers.authorization?.split(" ")[1] || req.cookies.captainToken; //TODO dont forget to add cookie while login
   try {
     if (!token) {
       return res.status(401).json({ message: "No token provided" });
     }
     const decoded = await verifyJwt(token, "auth");
     req.captain = decoded;
+    console.log("decode is ", decoded);
+    if (decoded.role != "captain") {
+      throw new AppError("access denied", 401);
+    }
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       try {
-        const captainId = decodeTokenWithoutVerify(token);
+        const { captainId, role } = decodeTokenWithoutVerify(token);
         if (!captainId) {
           return res.status(401).json({ message: "Invalid user in token" });
+        }
+        if (role != "captain") {
+          throw new AppError("access denied", 401);
         }
         // find if rt is present in db
         const captainFound = await captainModel
@@ -42,15 +51,22 @@ const authenticate = async (req, res, next) => {
           });
         }
 
-        const newRefreshToken = await generateToken(captainId, "refresh");
-        const newAuthToken = await generateToken(captainId, "auth");
+        const newRefreshToken = await generateToken(
+          captainId,
+          "captain",
+          "refresh"
+        );
+        const newAuthToken = await generateToken(captainId, "captain", "auth");
         // also update the token noew with new token and send the new auth token to captain
         captainFound.refreshToken = newRefreshToken;
         await captainFound.save();
         res.setHeader("Authorization", `Bearer ${newAuthToken}`);
-        res.cookie("token", newAuthToken, { httpOnly: true, secure: true });
+        res.cookie("captainToken", newAuthToken, {
+          httpOnly: true,
+          secure: true,
+        });
 
-        req.captain = { captainId: captainFound._id };
+        req.captain = { captainId: captainFound._id, role: captainFound.role };
         return next();
       } catch (refreshError) {
         return next({
@@ -69,7 +85,7 @@ const logout = async (req, res, next) => {
     await captainModel.findByIdAndUpdate(req.captain.captainId, {
       $unset: { refreshToken: 1 },
     });
-    res.clearCookie("token");
+    res.clearCookie("captainToken");
     res.removeHeader("Authorization");
     res.status(200).json({
       success: true,

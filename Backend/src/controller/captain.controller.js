@@ -59,11 +59,19 @@ const loginCaptain = async (req, res, next) => {
     if (!passwordMatch) {
       throw new AppError("Invalid credentials", 401);
     }
-    const authToken = await generateToken(captainFound._id, "auth");
-    const refreshToken = await generateToken(captainFound._id, "refresh");
+    const authToken = await generateToken(
+      captainFound._id,
+      captainFound.role,
+      "auth"
+    );
+    const refreshToken = await generateToken(
+      captainFound._id,
+      captainFound.role,
+      "refresh"
+    );
     captainFound.refreshToken = refreshToken;
     await captainFound.save();
-    res.cookie("token", authToken, authTokenOption);
+    res.cookie("captainToken", authToken, authTokenOption);
     return res.status(200).json({
       sucess: true,
       message: "captain logged in successfully",
@@ -73,20 +81,24 @@ const loginCaptain = async (req, res, next) => {
         email: captainFound.email,
         vehicle: captainFound.vehicle,
         token: authToken,
+        role: captainFound.role,
       },
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    next(new AppError("Internal server error", 500));
+    return next(new AppError("Internal server error", 500));
   }
 };
 
 const captainProfile = async (req, res, next) => {
   try {
-    const { userId } = req.captain;
+    const { userId, role } = req.captain;
     const captainFound = await findCaptainById(userId);
+    if (role != captainFound.role) {
+      throw new AppError("Access denied", 401);
+    }
     return res.status(200).json({
       success: true,
       message: "captain profile obtaoned",
@@ -96,6 +108,7 @@ const captainProfile = async (req, res, next) => {
         email: captainFound.email,
         vehicle: captainFound.vehicle,
         location: captainFound?.location,
+        role: captainFound.role,
       },
     });
   } catch (error) {
@@ -108,15 +121,18 @@ const captainProfile = async (req, res, next) => {
 
 const logOutCaptain = async (req, res, next) => {
   try {
-    const { userId } = req.captain;
+    const { userId, role } = req.captain;
     const captainFound = await findCaptainById(userId);
     if (!captainFound) {
       throw new AppError("unauthorised access", 401);
     }
+    if (role != captainFound.role) {
+      throw new AppError("Access denied", 401);
+    }
     captainFound.refreshToken = "";
     await captainFound.save();
 
-    res.cookie("token", "", { ...authTokenOption, maxAge: 0 }); // setting token expiry immediate manualy
+    res.cookie("captainToken", "", { ...authTokenOption, maxAge: 0 }); // setting token expiry immediate manualy
     return res.status(200).json({
       sucess: true,
       message: "captain logout successfully",

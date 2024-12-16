@@ -6,7 +6,8 @@ import {
 import userModel from "../model/User.model.js";
 
 const authenticate = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1] || req.cookies.token; //TODO dont forget to add cookie while login
+  const token =
+    req.headers.authorization?.split(" ")[1] || req.cookies.userToken; //TODO dont forget to add cookie while login
 
   try {
     if (!token) {
@@ -14,13 +15,19 @@ const authenticate = async (req, res, next) => {
     }
     const decoded = await verifyJwt(token, "auth");
     req.user = decoded;
+    if (decoded.role != "user") {
+      throw new AppError("access denied", 401);
+    }
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       try {
-        const userId = decodeTokenWithoutVerify(token);
+        const { userId, role } = decodeTokenWithoutVerify(token);
         if (!userId) {
           return res.status(401).json({ message: "Invalid user in token" });
+        }
+        if (role != "user") {
+          throw new AppError("access denied", 401);
         }
         // find if rt is present in db
         const userFound = await userModel
@@ -43,15 +50,15 @@ const authenticate = async (req, res, next) => {
           });
         }
 
-        const newRefreshToken = await generateToken(userId, "refresh");
-        const newAuthToken = await generateToken(userId, "auth");
+        const newRefreshToken = await generateToken(userId, "user", "refresh");
+        const newAuthToken = await generateToken(userId, "user", "auth");
         // also update the token noew with new token and send the new auth token to user
         userFound.refreshToken = newRefreshToken;
         await userFound.save();
         res.setHeader("Authorization", `Bearer ${newAuthToken}`);
-        res.cookie("token", newAuthToken, { httpOnly: true, secure: true });
+        res.cookie("userToken", newAuthToken, { httpOnly: true, secure: true });
 
-        req.user = { userId: userFound._id };
+        req.user = { userId: userFound._id, role: userFound.role };
         return next();
       } catch (refreshError) {
         return next({
@@ -70,7 +77,7 @@ const logout = async (req, res, next) => {
     await userModel.findByIdAndUpdate(req.user.userId, {
       $unset: { refreshToken: 1 },
     });
-    res.clearCookie("token");
+    res.clearCookie("userToken");
     res.removeHeader("Authorization");
     res.status(200).json({
       success: true,

@@ -8,18 +8,24 @@ import CaptainSignup from "./pages/CaptainSignup";
 import LandingPage from "./pages/LandingPage";
 import SignupOption from "./pages/SignupOption";
 import LocationConsent from "./pages/LocationConsent";
+import Forbidden from "./pages/ForbiddenPage";
+import ProtectedRoute from "./components/AuthWrapper/ProtectedRoute";
+
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<SignupOption />} />
+        <Route path="/forbidden" element={<Forbidden />} />
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/user-signup" element={<UserSignup />} />
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
-        <Route path="/location-consent" element={<LocationConsent />} />
+        <Route element={<ProtectedRoute allowedRoles={["captain", "user"]} />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/location-consent" element={<LocationConsent />} />
+        </Route>
       </Routes>
     </div>
   );

@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../components/Button";
-
+import { requestLocationAccess } from "../utils/locationAccess.js";
 const LocationConsent = () => {
+  const [loading, setLoading] = useState(false);
+  const handleClick = async (e) => {
+    console.log("clicked");
+    e.preventDefault();
+    setLoading(true);
+    try {
+      requestLocationAccess();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="m-4">
       <div className="h-[50vh] bg-no-repeat bg-center bg-[url('LandingPage/bg_car2.png')]"></div>
@@ -24,6 +38,9 @@ const LocationConsent = () => {
       </div>
       <div className="flex justify-center mt-20">
         <Button
+          onClick={handleClick}
+          disabled={loading}
+          loading={loading}
           name={"ALLOW"}
           style={" bg-black text-white w-full max-w-xs "}
         />

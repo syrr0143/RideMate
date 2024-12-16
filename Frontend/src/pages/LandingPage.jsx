@@ -7,9 +7,12 @@ const LandingPage = () => {
   return (
     <>
       <div>
-        <div className="h-[65vh] bg-[url('LandingPage/bg_car.png')] bg-contain bg-no-repeat bg-center">
+        <div
+          loading="lazy"
+          className="h-[65vh] bg-[url('LandingPage/bg_car2.png')] bg-auto bg-no-repeat bg-center"
+        >
           {" "}
-          <BrandLogo style={'absolute'}/>
+          <BrandLogo style={"absolute"} />
         </div>
         <div className="m-4">
           <div className="font-bold text-xl w-[60vw]">

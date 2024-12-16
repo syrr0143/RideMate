@@ -20,7 +20,7 @@ const UserSignup = () => {
     try {
       if (validateForm()) {
         const res = await userSignUp(formData);
-        navigate("/user-login");
+        navigate("/user-login", { replace: true });
       }
     } catch (error) {
       setApiError(error.response?.data.message);

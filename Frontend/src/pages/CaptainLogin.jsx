@@ -2,23 +2,41 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import InputBox from "../components/InputBox";
 import BrandLogo from "../components/BrandLogo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useFormValidation from "../hooks/useFormValidation.jsx";
 import { validateLogin } from "../utils/validation.js";
+import { captainLogin } from "../utils/apiHandling.js";
+import useAuth from "../hooks/useAuth.jsx";
 
 const CaptainLogin = () => {
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const { handleLogin } = useAuth();
+  const navigate = useNavigate();
   const initialState = {
     email: "",
     password: "",
   };
-  const [loading, setLoading] = useState(false);
+
   const { errors, formData, onChange, resetForm, validateForm } =
     useFormValidation(initialState, validateLogin);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("okay");
+    setApiError("");
+    setLoading(true);
+    try {
+      if (validateForm()) {
+        const res = await captainLogin(formData);
+        const token = res.data.captain.token;
+        handleLogin(token);
+        navigate("/home",{replace:true});
+      }
+    } catch (error) {
+      setApiError(error.response.data.message);
+      console.log("error", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -54,6 +72,7 @@ const CaptainLogin = () => {
           {errors.password && (
             <small className="text-red-500">{errors.password}</small>
           )}
+          {apiError && <small className="text-red-500">{apiError}</small>}
           <Button
             name={"Login"}
             disabled={loading}

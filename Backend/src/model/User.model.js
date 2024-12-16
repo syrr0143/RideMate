@@ -32,6 +32,10 @@ const userSchema = mongoose.Schema(
       default: Date.now,
       expires: "30d",
     },
+    role: {
+      type: String,
+      default: "user",
+    },
   },
   { timestamps: true }
 );

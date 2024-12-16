@@ -72,6 +72,10 @@ const captainSchema = mongoose.Schema(
       },
       default: "inActive",
     },
+    role: {
+      type: String,
+      default: "captain",
+    },
     vehicle: vehicleSchema,
     location: locationSchema,
     refreshToken: {

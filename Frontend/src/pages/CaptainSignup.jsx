@@ -34,7 +34,7 @@ const CaptainSignup = () => {
       if (validateForm()) {
         console.log("formData", formData);
         const res = await captainSignUp(formData);
-        navigate("/captain-login");
+        navigate("/captain-login",{replace:true});
       }
     } catch (error) {
       console.log("error", error);

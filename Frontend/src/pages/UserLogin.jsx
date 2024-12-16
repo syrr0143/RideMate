@@ -10,7 +10,7 @@ import { userLogin } from "../utils/apiHandling.js";
 
 const UserLogin = () => {
   const navigate = useNavigate();
-  const { login: AuthLogin } = useAuth();
+  const { handleLogin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
 
@@ -30,8 +30,9 @@ const UserLogin = () => {
       if (validateForm()) {
         const res = await userLogin(formData);
         const token = res.data.user.token;
-        AuthLogin(token);
-        navigate("/home");
+        console.log("login user is ", res.data.user.role);
+        handleLogin(token);
+        navigate("/home",{replace:true});
       }
     } catch (error) {
       setApiError(error.response?.data.message);

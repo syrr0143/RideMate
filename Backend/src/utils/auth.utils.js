@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const validTokenTypes = ["auth", "refresh"];
 
-const generateToken = (userId, tokenType) => {
+const generateToken = (userId,role, tokenType) => {
   try {
     if (!validTokenTypes.includes(tokenType)) {
       // throw new AppError(`Invalid token type: ${tokenType}`);
@@ -22,7 +22,7 @@ const generateToken = (userId, tokenType) => {
         ? process.env.AUTH_TOKEN_EXPIRES_IN || "1d"
         : process.env.REFRESH_TOKEN_EXPIRES_IN || "30d";
 
-    const token = jwt.sign({ userId }, secret, { expiresIn });
+    const token = jwt.sign({ userId, role }, secret, { expiresIn });
     return token;
   } catch (error) {
     console.error(`Error generating the ${tokenType} token:`, error.message);
@@ -59,7 +59,7 @@ const decodeTokenWithoutVerify = (token) => {
         message: "Invalid token structure",
       });
     }
-    return decoded.userId;
+    return decoded;
   } catch (error) {
     console.log(
       `Error getting the userid from ${tokenType} token:`,

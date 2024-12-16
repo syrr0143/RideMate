@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import {authTokenOption,refreshTokenOptions} from '../config/cookie.config.js'
+import {
+  authTokenOption,
+  refreshTokenOptions,
+} from "../config/cookie.config.js";
 import userValidationSchema from "../validations/user.validations.js";
 import {
   createUser,
@@ -46,11 +49,11 @@ const loginUser = async (req, res, next) => {
     if (!passwordMatch) {
       throw new AppError("Invalid credentials", 401);
     }
-    const authToken = await generateToken(userFound._id, "auth");
-    const refreshToken = await generateToken(userFound._id, "refresh");
-      userFound.refreshToken = refreshToken;
-      await userFound.save();
-      res.cookie("token", authToken, authTokenOption);
+    const authToken = await generateToken(userFound._id, "user", "auth");
+    const refreshToken = await generateToken(userFound._id, "user", "refresh");
+    userFound.refreshToken = refreshToken;
+    await userFound.save();
+    res.cookie("userToken", authToken, authTokenOption);
     return res.status(200).json({
       sucess: true,
       message: "user logged in successfully",
@@ -59,20 +62,24 @@ const loginUser = async (req, res, next) => {
         fullName: userFound.fullName,
         email: userFound.email,
         token: authToken,
+        role: userFound.role,
       },
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
-      }
-      next(new AppError("Internal server error", 500));
+    }
+    next(new AppError("Internal server error", 500));
   }
 };
 
 const userProfile = async (req, res, next) => {
   try {
-    const { userId } = req.user;
+    const { userId, role } = req.user;
     const userFound = await findUserById(userId);
+    if (role != userFound.role) {
+      throw new AppError("Access denied", 401);
+    }
     return res.status(200).json({
       success: true,
       message: "user profile obtaoned",
@@ -80,37 +87,42 @@ const userProfile = async (req, res, next) => {
         _id: userFound._id,
         fullName: userFound.fullName,
         email: userFound.email,
+        role: userFound.role,
       },
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
-      }
-      next(new AppError("Internal server error", 500));
+    }
+    next(new AppError("Internal server error", 500));
   }
 };
 
 const logOutUser = async (req, res, next) => {
-    try {
-        const { userId } = req.user;
-        const userFound = await findUserById(userId);
-        if (!userFound) {
-            throw new AppError('unauthorised access', 401);
-        }
-        userFound.refreshToken = "";
-        await userFound.save();
+  try {
+    const { userId } = req.user;
+    const userFound = await findUserById(userId);
 
-        res.cookie("token", "", { ...authTokenOption , maxAge:0}); // setting token expiry immediate manualy
-        return res.status(200).json({
-            sucess: true,
-            message: "user logout successfully",
-        })
-    } catch (error) {
-        if (error instanceof AppError) {
-          return next(error);
-        }
-        next(new AppError("Internal server error", 500));
+    if (!userFound) {
+      throw new AppError("unauthorised access", 401);
     }
-}
+    if (role != userFound.role) {
+      throw new AppError("Access denied", 401);
+    }
+    userFound.refreshToken = "";
+    await userFound.save();
+
+    res.cookie("userToken", "", { ...authTokenOption, maxAge: 0 }); // setting token expiry immediate manualy
+    return res.status(200).json({
+      sucess: true,
+      message: "user logout successfully",
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    next(new AppError("Internal server error", 500));
+  }
+};
 
 export { signUpUser, loginUser, userProfile, logOutUser };

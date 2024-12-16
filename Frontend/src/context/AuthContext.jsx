@@ -1,53 +1,46 @@
-import React, { createContext, useEffect, useState } from "react";
-import { getUserProfile } from "../utils/apiHandling";
+import { createContext, useContext } from "react";
+import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+const AuthContext = createContext(undefined);
 
-export const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    setToken(savedToken);
-  }, [token]);
+function AuthProvider({ children }) {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [userRole, setUserRole] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!token) return;
-
-      try {
-        const response = await getUserProfile(token);
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        //  logout(); // Clear token and user this was causing the token cleaning
-      }
-    };
-
     if (token) {
-      fetchProfile(); // Ensure this is only called when token exists
+      try {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("token");
+      }
+    } else {
+      setUserRole(null); // No token, so no user role
+      setToken(null);
     }
+    setLoading(false);
   }, [token]);
 
-  const login = (tokens) => {
-    if (tokens) {
-      localStorage.setItem("token", tokens);
-      console.log("Token saved:", localStorage.getItem("token"));
-    } else {
-      console.log("No token provided");
-    }
-    setToken(tokens);
-  };
+  function handleLogin(token) {
+    setToken(token);
+    localStorage.setItem("token", token);
+  }
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
-  };
+  function handleLogout() {
+    setToken(null); // Clear token in state
+    setUserRole(null); // Clear user role
+    localStorage.removeItem("token"); // Remove token from localStorage
+  }
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ handleLogin, handleLogout, token, userRole, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
+}
+
+export { AuthContext, AuthProvider };
