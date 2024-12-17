@@ -9,22 +9,45 @@ import LandingPage from "./pages/LandingPage";
 import SignupOption from "./pages/SignupOption";
 import LocationConsent from "./pages/LocationConsent";
 import Forbidden from "./pages/ForbiddenPage";
-import ProtectedRoute from "./components/AuthWrapper/ProtectedRoute";
+import {
+  ProtectedRoute,
+  LoggedInProtectedRoute,
+} from "./components/AuthWrapper/ProtectedRoute";
+import ChoseVehicle from "./pages/ChoseVehicle";
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<SignupOption />} />
+        <Route
+          path="/"
+          element={<LoggedInProtectedRoute element={<LandingPage />} />}
+        />
+        <Route
+          path="/signup"
+          element={<LoggedInProtectedRoute element={<SignupOption />} />}
+        />
+        <Route
+          path="/user-login"
+          element={<LoggedInProtectedRoute element={<UserLogin />} />}
+        />
+        <Route
+          path="/user-signup"
+          element={<LoggedInProtectedRoute element={<UserSignup />} />}
+        />
+        <Route
+          path="/captain-login"
+          element={<LoggedInProtectedRoute element={<CaptainLogin />} />}
+        />
+        <Route
+          path="/captain-signup"
+          element={<LoggedInProtectedRoute element={<CaptainSignup />} />}
+        />
         <Route path="/forbidden" element={<Forbidden />} />
-        <Route path="/user-login" element={<UserLogin />} />
-        <Route path="/user-signup" element={<UserSignup />} />
-        <Route path="/captain-login" element={<CaptainLogin />} />
-        <Route path="/captain-signup" element={<CaptainSignup />} />
         <Route element={<ProtectedRoute allowedRoles={["captain", "user"]} />}>
           <Route path="/home" element={<Home />} />
           <Route path="/location-consent" element={<LocationConsent />} />
+          <Route path="/chose-vehicle" element={<ChoseVehicle />} />
         </Route>
       </Routes>
     </div>

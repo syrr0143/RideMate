@@ -1,22 +1,32 @@
-import React from "react";
-import BottomNavbar from "../components/BottomNavbar.jsx";
-import TopNavbar from "../components/TopNavbar.jsx";
-import useAuth from "../hooks/useAuth.jsx";
-import Button from "../components/Button.jsx";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import BrandLogo from "../components/BrandLogo.jsx";
 
+import BottomNavbar from "../components/BottomNavbar.jsx";
+
+import FindTrip from "../components/FindTrip.jsx";
 const Home = () => {
-  const { token, handleLogin, handleLogout } = useAuth();
+  const [hidden, setHidden] = useState(false);
   return (
-    <div>
-      <TopNavbar />
-      <Button
-        onClick={token ? handleLogout : handleLogin}
-        name={token ? "logout" : "login"}
-      />
-      <Link to={"/location-consent"}>consent</Link>
+    <>
+      <div className="max-h-screen">
+        <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
+          <BrandLogo style={"absolute top-0 left-0 mt-0 ml-2"} />
+          <img
+            src="/LandingPage/map.jpeg"
+            alt=""
+            className="object-cover h-full w-full"
+          />
+        </div>
+        <div className="pb-16">
+          <div className="overflow-scroll">
+            <FindTrip hidden={hidden} setHidden={setHidden} />
+          
+            {/* <ChoseVehicle /> */}
+          </div>
+        </div>
+      </div>
       <BottomNavbar />
-    </div>
+    </>
   );
 };
 

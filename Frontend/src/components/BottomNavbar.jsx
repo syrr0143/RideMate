@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const BottomNavbar = () => {
+const BottomNavbar = ({ style}) => {
   return (
-    <div className="fixed bottom-0  w-full bg-base-200">
+    <div className={`${style} fixed bottom-0 h-16   w-full bg-base-200`}>
       <ul className="flex justify-around menu menu-horizontal bg-base-200 rounded-box p-0">
         <li>
           <Link to={"/home"} className="flex justify-center pt-2 pb-0">
