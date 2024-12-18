@@ -14,7 +14,10 @@ import {
   LoggedInProtectedRoute,
 } from "./components/AuthWrapper/ProtectedRoute";
 import ChoseVehicle from "./pages/ChoseVehicle";
-
+import ConfirmRide from "./pages/ConfirmRide";
+import FindTrip from "./components/FindTrip";
+import DriverAssigned from "./components/DriverAssigned";
+import MakePayment from "./components/MakePayment";
 const App = () => {
   return (
     <div>
@@ -45,9 +48,13 @@ const App = () => {
         />
         <Route path="/forbidden" element={<Forbidden />} />
         <Route element={<ProtectedRoute allowedRoles={["captain", "user"]} />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/location-consent" element={<LocationConsent />} />
-          <Route path="/chose-vehicle" element={<ChoseVehicle />} />
+          <Route path="/home" element={<Home />}>
+            <Route index element={<FindTrip />} />
+            <Route path="chose-vehicle" element={<ChoseVehicle />} />
+            <Route path="confirm-ride" element={<ConfirmRide />} />
+            <Route path="driver-assigned" element={<DriverAssigned />} />
+            <Route path="make-payment" element={<MakePayment />} />
+          </Route>
         </Route>
       </Routes>
     </div>

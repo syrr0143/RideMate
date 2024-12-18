@@ -6,8 +6,9 @@ const VehicleDetails = ({
   fare,
   capacity,
   currentTime,
-    estimatedTravelTime,
-  otherDetails
+  estimatedTravelTime,
+  otherDetails,
+  onClick
 }) => {
   const VehicleImageSrc = {
     car: "/LandingPage/car.webp",
@@ -15,7 +16,7 @@ const VehicleDetails = ({
     bike: "/LandingPage/bike.jpeg",
   };
   return (
-    <div className="flex mt-2 cursor-pointer border-gray-200 border-2 rounded-xl p-4">
+    <div onClick={onClick} className="flex mt-2 active:border-black cursor-pointer border-gray-200 border-2 rounded-xl p-4">
       <div className="w-2/6">
         <img
           src={VehicleImageSrc[vehicleType]}
@@ -33,7 +34,9 @@ const VehicleDetails = ({
         <p className="font-semibold text-sm">
           {estimatedTravelTime} mins away <span>{currentTime}</span>
         </p>
-        <p className="text-gray-500 text-sm font-semibold">Affordable, compact ride</p>
+        <p className="text-gray-500 text-sm font-semibold">
+          Affordable, compact ride
+        </p>
       </div>
       <div className="w-1/6 font-bold text-xl">
         <p>₹{fare}</p>

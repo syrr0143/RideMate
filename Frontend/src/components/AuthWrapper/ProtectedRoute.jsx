@@ -34,7 +34,7 @@ const LoggedInProtectedRoute = ({ element }) => {
 
   // If user is logged in (i.e., token exists), redirect them away from these routes
   if (token) {
-    return <Navigate to="/location-consent" />; // Redirect to a dashboard or another page for logged-in users
+    return <Navigate to="/home" />; // Redirect to a dashboard or another page for logged-in users
   }
 
   // If no token (user is not logged in), show the page

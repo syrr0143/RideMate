@@ -1,30 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import InputBox from "../components/InputBox.jsx";
 import { FaMapPin } from "react-icons/fa";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { IoIosArrowDropup } from "react-icons/io";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import {LocationSearchResult} from '../components/AllImport/index.jsx'
+import { LocationSearchResult } from "../components/AllImport/index.jsx";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useHidden } from "../hooks/useHidden.jsx";
 
-const FindTrip = ({ hidden, setHidden}) => {
-   const locationArray = [
-     { type: "plumber", address: "22b, near lahisarai" },
-     { type: "parking", address: "22b, near lahisarai" },
-     ,
-     { type: "museum", address: "22b, near lahisarai" },
-     ,
-     { type: "school", address: "22b, near lahisarai" },
-     ,
-     { type: "cinema", address: "22b, near lahisarai" },
-     ,
-     { type: "medical", address: "22b, near lahisarai" },
-     ,
-     { type: "hospital", address: "22b, near lahisarai" },
-     { type: "hospital", address: "22b, near lahisarai in bhagalpur bihar sabour" },
-   ];
-    const handleFocus = () => {
-      setHidden(true);
-    };
+const FindTrip = () => {
+  const { hidden, setHidden } = useHidden();
+  const navigate = useNavigate();
+  const locationArray = [
+    { type: "plumber", address: "22b, near lahisarai" },
+    { type: "parking", address: "22b, near lahisarai" },
+    ,
+    { type: "museum", address: "22b, near lahisarai" },
+    ,
+    { type: "school", address: "22b, near lahisarai" },
+    ,
+    { type: "cinema", address: "22b, near lahisarai" },
+    ,
+    { type: "medical", address: "22b, near lahisarai" },
+    ,
+    { type: "hospital", address: "22b, near lahisarai" },
+    {
+      type: "hospital",
+      address: "22b, near lahisarai in bhagalpur bihar sabour",
+    },
+  ];
+  const handleFocus = () => {
+    setHidden(true);
+  };
+  const handleClick = (e) => {
+    console.log("clicked");
+    setHidden(false);
+    navigate("chose-vehicle");
+  };
   return (
     <>
       <div className="ml-2 me-2 mt-2">
@@ -64,8 +76,10 @@ const FindTrip = ({ hidden, setHidden}) => {
           {/* Second Input Box */}
         </form>
         <div className="mt-4">
-          {locationArray.map((location) => (
+          {locationArray.map((location, idx) => (
             <LocationSearchResult
+              key={idx}
+              handleClick={handleClick}
               address={location.address}
               type={location.type}
             />
@@ -74,6 +88,6 @@ const FindTrip = ({ hidden, setHidden}) => {
       </div>
     </>
   );
-}
+};
 
-export default FindTrip
+export default FindTrip;

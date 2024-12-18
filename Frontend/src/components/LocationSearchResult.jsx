@@ -29,7 +29,7 @@ import {
 import { BiSolidBank, BiSolidCameraMovie } from "react-icons/bi"; // More icons from Material Design
 import { GiCampfire, GiPostOffice } from "react-icons/gi"; // More icons from GI icons
 
-const LocationSearchResult = ({ type, address }) => {
+const LocationSearchResult = ({ type, address, handleClick }) => {
   // Map of types to icons
   const getIcon = (type) => {
     switch (type) {
@@ -107,14 +107,18 @@ const LocationSearchResult = ({ type, address }) => {
         return <GiCemetery className="text-black" />;
       case "tourist_attraction":
         return <FaLandmark className="text-black" />;
-     
+
       default:
         return <FaMapPin className="text-black" />;
     }
   };
 
+  
   return (
-    <div className="mt-2 flex flex-row items-center space-x-4 cursor-pointer border-2 border-gray-100 p-2 rounded-xl active:border-black">
+    <div
+      onClick={handleClick}
+      className="mt-2 flex flex-row items-center space-x-4 cursor-pointer border-2 border-gray-100 p-2 rounded-xl active:border-black"
+    >
       <div className="text-xl p-2 bg-gray-300 rounded-full">
         {getIcon(type)} {/* Your icon */}
       </div>
