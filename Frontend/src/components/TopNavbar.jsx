@@ -1,5 +1,5 @@
 import React from "react";
-import BrandLogo from "../components/BrandLogo.jsx";
+import { BrandLogo } from "../components/index";
 const Navbar = () => {
   return (
     <>

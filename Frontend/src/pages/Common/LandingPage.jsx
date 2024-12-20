@@ -1,7 +1,6 @@
 import React from "react";
-import Button from "../components/Button";
 import { Link } from "react-router-dom";
-import BrandLogo from "../components/BrandLogo";
+import { Button, BrandLogo } from "../../components/index.jsx";
 
 const LandingPage = () => {
   return (

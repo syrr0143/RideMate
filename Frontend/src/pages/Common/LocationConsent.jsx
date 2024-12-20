@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
-import { requestLocationAccess } from "../utils/locationAccess.js";
+import { Button, InputBox, BrandLogo } from "../../components/index.jsx";
+
+import { requestLocationAccess } from "../../utils/locationAccess.js";
+
 const LocationConsent = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e) => {

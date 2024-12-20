@@ -6,6 +6,15 @@ class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
+class TokenExpiredError extends Error {
+  constructor(message = "Token has expired") {
+    super(message);
+    this.name = "TokenExpiredError";
+    this.statusCode = 401;
+  }
+}
+
+
 
 const errorHandler = (err, req, res, next) => {
   console.error("Error:", err.message); // Log the error for debugging (only in development)
@@ -25,4 +34,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-export { AppError, errorHandler };
+export { AppError, errorHandler, TokenExpiredError };

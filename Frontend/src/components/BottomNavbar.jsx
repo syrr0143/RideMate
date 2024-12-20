@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import useAuth from '../hooks/useAuth.jsx'
+
 const BottomNavbar = ({ style}) => {
+  const { userRole} = useAuth();
   return (
     <div className={`${style} fixed bottom-0 h-16   w-full bg-base-200`}>
       <ul className="flex justify-around menu menu-horizontal bg-base-200 rounded-box p-0">
         <li>
-          <Link to={"/home"} className="flex justify-center pt-2 pb-0">
+          <Link
+            to={`/${userRole}/home`}
+            className="flex justify-center pt-2 pb-0"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -26,7 +32,10 @@ const BottomNavbar = ({ style}) => {
           </p>
         </li>
         <li>
-          <Link to={"/services"} className="flex justify-center pt-2 pb-0">
+          <Link
+            to={`/${userRole}/home`}
+            className="flex justify-center pt-2 pb-0"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 "
@@ -47,7 +56,10 @@ const BottomNavbar = ({ style}) => {
           </p>
         </li>
         <li>
-          <Link to={"/activity"} className="flex justify-center pt-2 pb-0">
+          <Link
+            to={`/${userRole}/home`}
+            className="flex justify-center pt-2 pb-0"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -68,7 +80,10 @@ const BottomNavbar = ({ style}) => {
           </p>
         </li>
         <li>
-          <Link to={"/profile"} className="flex justify-center pt-2 pb-0">
+          <Link
+            to={`/${userRole}/home`}
+            className="flex justify-center pt-2 pb-0"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"

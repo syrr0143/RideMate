@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
-import InputBox from "../components/InputBox";
-import BrandLogo from "../components/BrandLogo";
+import useFormValidation from "../../hooks/useFormValidation.jsx";
+import useAuth from "../../hooks/useAuth.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import useFormValidation from "../hooks/useFormValidation.jsx";
-import { validateLogin } from "../utils/validation.js";
-import { captainLogin } from "../utils/apiHandling.js";
-import useAuth from "../hooks/useAuth.jsx";
+import { validateLogin } from "../../utils/validation.js";
+import { userLogin } from "../../utils/apiHandling.js";
+import { Button, InputBox, BrandLogo } from "../../components/index.jsx";
 
-const CaptainLogin = () => {
+const UserLogin = () => {
+  const navigate = useNavigate();
+  const { handleLogin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const { handleLogin } = useAuth();
-  const navigate = useNavigate();
+
   const initialState = {
     email: "",
     password: "",
@@ -23,22 +22,24 @@ const CaptainLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setApiError("");
     setLoading(true);
+    setApiError("");
     try {
       if (validateForm()) {
-        const res = await captainLogin(formData);
-        const token = res.data.captain.token;
+        const res = await userLogin(formData);
+        const token = res.data.user.token;
+        console.log("login user is ", res.data.user.role);
         handleLogin(token);
-        navigate("/home",{replace:true});
+        navigate("/user/home", { replace: true });
       }
     } catch (error) {
-      setApiError(error.response.data.message);
-      console.log("error", error);
+      setApiError(error.response?.data.message);
+      console.log("some error", error);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <>
       <BrandLogo />
@@ -53,37 +54,39 @@ const CaptainLogin = () => {
           </label>
           <InputBox
             value={formData.email}
-            name={"email"}
             onChange={onChange}
+            name={"email"}
             label={"Email Address"}
+            type="text"
             placeholder={"exmample@gmail.com"}
           />
+
           {errors.email && (
             <small className="text-red-500">{errors.email}</small>
           )}
           <InputBox
             value={formData.password}
-            name={"password"}
             onChange={onChange}
+            name={"password"}
             type="password"
             label={"Password"}
-            placeholder={". . . . . ."}
+            placeholder={"Paasword"}
           />
           {errors.password && (
             <small className="text-red-500">{errors.password}</small>
           )}
           {apiError && <small className="text-red-500">{apiError}</small>}
           <Button
-            name={"Login"}
-            disabled={loading}
             type={"submit"}
+            disabled={loading}
+            name={"Login"}
             loading={loading}
             style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
           />
         </form>
         <small className="flex justify-center">
           Don't have an account?{" "}
-          <Link to={"/captain-signup"} className="font-bold ">
+          <Link to={"/user-signup"} className="font-bold ">
             Signup
           </Link>
         </small>
@@ -92,4 +95,4 @@ const CaptainLogin = () => {
   );
 };
 
-export default CaptainLogin;
+export default UserLogin;

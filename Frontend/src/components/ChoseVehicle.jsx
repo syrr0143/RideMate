@@ -1,6 +1,5 @@
 import React from "react";
-import VehicleDetails from "../components/VehicleDetails";
-import BottomNavbar from "../components/BottomNavbar";
+import { BottomNavbar, VehicleDetails } from "./index.jsx";
 import { useNavigate } from "react-router-dom";
 
 const ChoseVehicle = () => {
@@ -8,7 +7,7 @@ const ChoseVehicle = () => {
   const handleVehicleSelect = (vehicle) => {
     console.log("clicked");
     // Redirect to ConfirmRide page with selected vehicle details
-    navigate("/home/confirm-ride", { state: vehicle });
+    navigate("/user/home/confirm-ride", { state: vehicle });
   };
   return (
     <div className="h-[50vh] ">

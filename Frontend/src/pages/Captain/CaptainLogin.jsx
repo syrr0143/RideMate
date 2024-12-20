@@ -1,30 +1,38 @@
 import React, { useState } from "react";
-import { BrandLogo, Button, InputBox } from "../components/AllImport/index.jsx";
+import { Button, InputBox, BrandLogo } from "../../components/index.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import useFormValidation from "../hooks/useFormValidation";
-import { validateUserSignup } from "../utils/validation";
-import { userSignUp } from "../utils/apiHandling.js";
+import useFormValidation from "../../hooks/useFormValidation.jsx";
+import { validateLogin } from "../../utils/validation.js";
+import { captainLogin } from "../../utils/apiHandling.js";
+import useAuth from "../../hooks/useAuth.jsx";
 
-const UserSignup = () => {
-  const initialState = { fullName: "", email: "", password: "" };
-  const { formData, errors, onChange, validateForm, resetForm } =
-    useFormValidation(initialState, validateUserSignup);
-
-  const navigate = useNavigate();
+const CaptainLogin = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const { handleLogin } = useAuth();
+  const navigate = useNavigate();
+  const initialState = {
+    email: "",
+    password: "",
+  };
+
+  const { errors, formData, onChange, resetForm, validateForm } =
+    useFormValidation(initialState, validateLogin);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setApiError("");
+    setLoading(true);
     try {
       if (validateForm()) {
-        const res = await userSignUp(formData);
-        navigate("/user-login", { replace: true });
+        const res = await captainLogin(formData);
+        const token = res.data.captain.token;
+        handleLogin(token);
+        navigate("/captain/home", { replace: true });
       }
     } catch (error) {
-      setApiError(error.response?.data.message);
-      console.log("some error ", error);
+      setApiError(error.response.data.message);
+      console.log("error", error);
     } finally {
       setLoading(false);
     }
@@ -35,27 +43,16 @@ const UserSignup = () => {
       <div className="m-4">
         <form onSubmit={handleSubmit}>
           <label
-            htmlFor="creaeAccount"
+            htmlFor="createAccount"
             className="flex justify-center font-bold text-xl mt-4 mb-4"
           >
             {" "}
-            Create Account on Ridemate
+            Welcome Back to Ridemate
           </label>
-          <InputBox
-            value={formData.fullName}
-            name={"fullName"}
-            onChange={onChange}
-            label={"Full Name"}
-            placeholder={"John doe"}
-          />
-          {errors.fullName && (
-            <small className="text-red-500">{errors.fullName}</small>
-          )}
           <InputBox
             value={formData.email}
             name={"email"}
-            type="email"
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
             label={"Email Address"}
             placeholder={"exmample@gmail.com"}
           />
@@ -65,27 +62,27 @@ const UserSignup = () => {
           <InputBox
             value={formData.password}
             name={"password"}
+            onChange={onChange}
             type="password"
-            onChange={(e) => onChange(e)}
             label={"Password"}
-            placeholder={"Password"}
+            placeholder={". . . . . ."}
           />
           {errors.password && (
             <small className="text-red-500">{errors.password}</small>
           )}
           {apiError && <small className="text-red-500">{apiError}</small>}
           <Button
-            type={"submit"}
+            name={"Login"}
             disabled={loading}
+            type={"submit"}
             loading={loading}
-            name={"Signup"}
             style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
           />
         </form>
         <small className="flex justify-center">
-          Already have an account?{" "}
-          <Link to={"/user-login"} className="font-bold ">
-            Login
+          Don't have an account?{" "}
+          <Link to={"/captain-signup"} className="font-bold ">
+            Signup
           </Link>
         </small>
       </div>
@@ -93,4 +90,4 @@ const UserSignup = () => {
   );
 };
 
-export default UserSignup;
+export default CaptainLogin;

@@ -52,8 +52,9 @@ const loginUser = async (req, res, next) => {
     const authToken = await generateToken(userFound._id, "user", "auth");
     const refreshToken = await generateToken(userFound._id, "user", "refresh");
     userFound.refreshToken = refreshToken;
+    console.log("for user refresh token is ", refreshToken);
     await userFound.save();
-    res.cookie("userToken", authToken, authTokenOption);
+    res.cookie("token", authToken, authTokenOption);
     return res.status(200).json({
       sucess: true,
       message: "user logged in successfully",
@@ -98,6 +99,28 @@ const userProfile = async (req, res, next) => {
   }
 };
 
+const generateNewToken = async (req, res, next) => {
+  try {
+    const newAuthToken = res.locals.newAuthToken;
+
+    if (!newAuthToken) {
+      return res.status(400).json({ message: "Failed to generate new token" });
+    }
+
+    // Return the new auth token in the response body
+    return res.status(200).json({
+      message: "New token generated",
+      success: true,
+      token: newAuthToken, // Pass the new token in the response
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    next(new AppError("Internal server error", 500));
+  }
+};
+
 const logOutUser = async (req, res, next) => {
   try {
     const { userId } = req.user;
@@ -125,4 +148,4 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
-export { signUpUser, loginUser, userProfile, logOutUser };
+export { signUpUser, loginUser, userProfile, logOutUser, generateNewToken };

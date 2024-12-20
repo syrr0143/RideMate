@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import InputBox from "../components/InputBox.jsx";
-import { FaMapPin } from "react-icons/fa";
-import { IoIosArrowDropdown } from "react-icons/io";
-import { IoIosArrowDropup } from "react-icons/io";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { LocationSearchResult } from "../components/AllImport/index.jsx";
+import { FaMapPin, FaMapMarkerAlt } from "react-icons/fa";
+import { IoIosArrowDropup, IoIosArrowDropdown } from "react-icons/io";
+import { LocationSearchResult } from "../components/index.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useHidden } from "../hooks/useHidden.jsx";
 

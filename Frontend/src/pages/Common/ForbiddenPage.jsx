@@ -1,6 +1,6 @@
 // Forbidden.jsx
 import React from "react";
-import BrandLogo from "../components/BrandLogo";
+import { BrandLogo } from "../../components/index.jsx";
 
 const Forbidden = () => {
   return (

@@ -4,7 +4,9 @@ import {
   loginUser,
   userProfile,
   logOutUser,
+  generateNewToken
 } from "../controller/user.controller.js";
+import { getCoordinates, getDistanceAndETA,getSuggestions} from '../controller/map.controller.js'
 import {
   signUpInputValidation,
   loginInputValidation,
@@ -16,5 +18,10 @@ router.post("/signup", signUpInputValidation, signUpUser);
 router.post("/login", loginInputValidation, loginUser);
 router.get("/profile", authenticate, userProfile);
 router.post("/logout", authenticate, logOutUser);
+router.post("/get-token", authenticate, generateNewToken);
+// map related routes goes here 
+router.post("/get-coordinates", authenticate, getCoordinates);
+router.post("/distance-eta", authenticate, getDistanceAndETA);
+router.post("/location-suggestion", authenticate,getSuggestions );
 
 export default router;

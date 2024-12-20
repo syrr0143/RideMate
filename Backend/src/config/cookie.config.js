@@ -8,9 +8,10 @@ const getMaxAge = (days) => {
 };
 const cookieOptions = {
   httpOnly: true, // Prevents JavaScript access
-  sameSite: "strict", // Prevents CSRF attacks
+  sameSite: "lax", // Prevents CSRF attacks lax in dev , strict in production
   maxAge: 24 * 60 * 60 * 1000, // Default to 1 day
   path: "/", // Accessible for the entire domain
+  secure: false, // Accessible for the entire domain
 };
 
 const refreshTokenOptions = {

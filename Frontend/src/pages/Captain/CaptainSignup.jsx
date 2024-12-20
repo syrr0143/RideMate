@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
-import InputBox from "../components/InputBox";
-import BrandLogo from "../components/BrandLogo";
+import { Button, InputBox, BrandLogo } from "../../components/index.jsx";
+
 import { Link, useNavigate } from "react-router-dom";
-import { validateCaptainSignup } from "../utils/validation.js";
-import useFormValidation from "../hooks/useFormValidation.jsx";
-import { captainSignUp } from "../utils/apiHandling.js";
+import { validateCaptainSignup } from "../../utils/validation.js";
+import useFormValidation from "../../hooks/useFormValidation.jsx";
+import { captainSignUp } from "../../utils/apiHandling.js";
 
 const CaptainSignup = () => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +33,7 @@ const CaptainSignup = () => {
       if (validateForm()) {
         console.log("formData", formData);
         const res = await captainSignUp(formData);
-        navigate("/captain-login",{replace:true});
+        navigate("/captain-login", { replace: true });
       }
     } catch (error) {
       console.log("error", error);

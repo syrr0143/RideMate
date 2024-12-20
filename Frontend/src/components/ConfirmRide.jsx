@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import VehicleDetails from "../components/VehicleDetails";
+
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaMapPin, FaUser } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
-import BrandLogo from "../components/BrandLogo";
-import Button from "../components/Button";
-const ConfirmRide = ({ userCurrentLocation, userDestinationLocation }) => {
+
+import { Button } from "./index";
+
+const ConfirmRide = ({}) => {
   const VehicleImageSrc = {
     car: "/LandingPage/car.webp",
     auto: "/LandingPage/auto.jpeg",
     bike: "/LandingPage/bike.jpeg",
   };
   const [loading, setLoading] = useState(false);
-  const vehicle = {capacity: 2,
-                currentTime: "15:24",
-                estimatedTravelTime: 5,
-                fare: 193,
-                vehicleType: "auto",}
+  const vehicle = {
+    capacity: 2,
+    currentTime: "15:24",
+    estimatedTravelTime: 5,
+    fare: 193,
+    vehicleType: "auto",
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -25,11 +28,10 @@ const ConfirmRide = ({ userCurrentLocation, userDestinationLocation }) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/home/driver-assigned",{state:vehicle});
+      navigate("/user/home/driver-assigned", { state: vehicle });
     }, 3000);
   };
   return (
-   
     <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">
       <p className="text-xl font-bold mb-2 text-center">
         {loading ? "Looking For Nearby Driver..." : "Conform Your Ride"}

@@ -1,8 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
-import { MdHealthAndSafety } from "react-icons/md";
-import { MdEmergencyShare } from "react-icons/md";
+import { MdHealthAndSafety, MdEmergencyShare } from "react-icons/md";
 import { IoCallSharp } from "react-icons/io5";
 import { FaMapPin } from "react-icons/fa";
 const DriverAssigned = () => {

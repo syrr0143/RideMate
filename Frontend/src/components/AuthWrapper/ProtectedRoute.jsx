@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
-import Loader from "../Loader";
+import { Loader } from "../index";
 import { Navigate, Outlet, Route, useNavigate } from "react-router-dom";
-import Forbidden from "../../pages/ForbiddenPage";
+import Forbidden from "../../pages/Common/ForbiddenPage";
 
 const ProtectedRoute = ({ allowedRoles, children }) => {
   const navigate = useNavigate();
@@ -16,10 +16,9 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   }
 
   if (userRole === null || !token) {
-    navigate("/", { replace: true });
-    return null;
+    return <Navigate to={"/"} />;
   }
-  if (!allowedRoles.includes(userRole)) {
+  if (token && !allowedRoles.includes(userRole)) {
     return (
       <div>
         <Forbidden />
@@ -30,15 +29,21 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   return <Outlet />;
 };
 const LoggedInProtectedRoute = ({ element }) => {
-  const { token } = useAuth(); // Get token from auth context or state
+  const { token, userRole } = useAuth(); // Get token from auth context or state
+  const navigate = useNavigate();
 
-  // If user is logged in (i.e., token exists), redirect them away from these routes
-  if (token) {
-    return <Navigate to="/home" />; // Redirect to a dashboard or another page for logged-in users
-  }
+  useEffect(() => {
+    // Redirect if the user is logged in (token exists)
+    if (token && userRole === "user") {
+      navigate("/user/home", { replace: true });
+    }
+    if (token && userRole === "captain") {
+      navigate("/captain/home", { replace: true });
+    }
+  }, [token, navigate]);
 
   // If no token (user is not logged in), show the page
-  return element;
+  return !token ? element : null; // Prevent rendering `Navigate` directly
 };
 
 export { ProtectedRoute, LoggedInProtectedRoute };

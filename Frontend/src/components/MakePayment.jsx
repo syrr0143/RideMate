@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import VehicleDetails from "../components/VehicleDetails";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { FaMapMarkerAlt, FaMapPin, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaMapPin } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
-import BrandLogo from "../components/BrandLogo";
-import Button from "../components/Button";
+import { Button } from "../components/index";
+
 const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
   const VehicleImageSrc = {
     car: "/LandingPage/car.webp",
@@ -27,7 +26,7 @@ const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/home");
+      navigate("/user/home");
     }, 3000);
   };
   return (
