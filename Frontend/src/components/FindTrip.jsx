@@ -1,40 +1,98 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import InputBox from "../components/InputBox.jsx";
 import { FaMapPin, FaMapMarkerAlt } from "react-icons/fa";
 import { IoIosArrowDropup, IoIosArrowDropdown } from "react-icons/io";
 import { LocationSearchResult } from "../components/index.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useHidden } from "../hooks/useHidden.jsx";
+import { Button } from "../components/index.jsx";
+import axios from "axios";
+import useAuth from "../hooks/useAuth.jsx";
 
 const FindTrip = () => {
+  const { token } = useAuth();
   const { hidden, setHidden } = useHidden();
+  const [loading, setLoading] = useState(false);
+  const [locationSuggestion, setLocationSuggestion] = useState([]);
+  const [activeField, setActiveField] = useState(null);
+  const [tripData, setTripData] = useState({
+    source: "",
+    destination: "",
+  });
+  const timeoutRef = useRef(null);
   const navigate = useNavigate();
-  const locationArray = [
-    { type: "plumber", address: "22b, near lahisarai" },
-    { type: "parking", address: "22b, near lahisarai" },
-    ,
-    { type: "museum", address: "22b, near lahisarai" },
-    ,
-    { type: "school", address: "22b, near lahisarai" },
-    ,
-    { type: "cinema", address: "22b, near lahisarai" },
-    ,
-    { type: "medical", address: "22b, near lahisarai" },
-    ,
-    { type: "hospital", address: "22b, near lahisarai" },
-    {
-      type: "hospital",
-      address: "22b, near lahisarai in bhagalpur bihar sabour",
-    },
-  ];
-  const handleFocus = () => {
+  const handleFocus = (fieldName) => {
     setHidden(true);
+    setActiveField(fieldName); // Set the active field when input is focused
   };
-  const handleClick = (e) => {
-    console.log("clicked");
+
+  const handleTripDetailChange = (e) => {
+    const { name, value } = e.target;
+    setTripData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      if (value.trim()) {
+        fetchLocationSuggestion(value);
+      } else {
+        setLocationSuggestion([]);
+      }
+    }, 2000);
+  };
+
+  const fetchLocationSuggestion = async (query) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/location-suggestion",
+        { query }, // Send query in the body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in headers
+          },
+        }
+      );
+      console.log(response);
+      setLocationSuggestion(response.data || []);
+    } catch (error) {
+      console.error("Error fetching location suggestions:", error.message);
+    }
+  };
+  const handleLocationSelect = (location) => {
+    // Use activeField instead of checking tripData.source
+    setTripData((prev) => ({
+      ...prev,
+      [activeField]: location.place_name,
+    }));
+    setLocationSuggestion([]);
     setHidden(false);
-    navigate("chose-vehicle");
   };
+
+  const handleFindTrip = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/fare-details",
+        tripData, // Send tripData in the request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in headers
+          },
+        }
+      );
+      const fareDetails = response.data.fares;
+      navigate("/user/home/chose-vehicle", {
+        state: { ...tripData, fareDetails },
+      });
+    } catch (error) {
+      console.error("Error fetching fare details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="ml-2 me-2 mt-2">
@@ -55,7 +113,10 @@ const FindTrip = () => {
         <form className="w-full flex flex-col items-center space-y-4">
           <div className="relative w-full">
             <InputBox
-              onFocus={handleFocus}
+              onChange={handleTripDetailChange}
+              name={"source"}
+              value={tripData.source}
+              onFocus={() => handleFocus("source")}
               inputStyle="w-[95vw] pr-8"
               type="text"
               placeholder="Enter your source"
@@ -63,25 +124,44 @@ const FindTrip = () => {
 
             <FaMapMarkerAlt className="absolute right-4 top-8" />
             <InputBox
-              onFocus={handleFocus}
+              onChange={handleTripDetailChange}
+              name={"destination"}
+              value={tripData.destination}
+              onFocus={() => handleFocus("destination")}
               inputStyle="w-[95vw] pr-8"
               type="text"
               placeholder="Enter your destination"
             />
             <FaMapPin className="absolute right-4 top-24" />
           </div>
-
+          <Button
+            disabled={!tripData.source || !tripData.destination}
+            name={"Find trip"}
+            onClick={handleFindTrip}
+            style={"bg-black text-white w-full"}
+            type={"submit"}
+            loading={loading}
+          />
           {/* Second Input Box */}
         </form>
-        <div className="mt-4">
-          {locationArray.map((location, idx) => (
-            <LocationSearchResult
-              key={idx}
-              handleClick={handleClick}
-              address={location.address}
-              type={location.type}
-            />
-          ))}
+        <div
+          className="mt-2 w-[95vw] min-h-48 overflow-y-auto"
+          style={{ top: "120px", zIndex: 10 }}
+        >
+          {locationSuggestion.map((location, idx) =>
+            hidden ? (
+              <LocationSearchResult
+                key={idx}
+                handleClick={() =>
+                  handleLocationSelect(
+                    location,
+                    tripData.source ? "destination" : "source"
+                  )
+                }
+                address={location.place_name}
+              />
+            ) : null
+          )}
         </div>
       </div>
     </>

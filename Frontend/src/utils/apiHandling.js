@@ -27,7 +27,6 @@ const generateNewTokenForUser = async (token) => {
   }
 };
 
-
 const captainSignUp = async (captainInput) => {
   return axios.post(`${baseurl}/captain/signup`, captainInput);
 };
@@ -37,12 +36,12 @@ const captainLogin = async (credentials) => {
 };
 
 const getCaptainProfile = async (token) => {
-  return axios.get(`${API_URL}/captain/profile`, {
+  return axios.get(`${baseurl}/captain/profile`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 const getUserProfile = async (token) => {
-  return axios.get(`${API_URL}/user/profile`, {
+  return axios.get(`${baseurl}/user/profile`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

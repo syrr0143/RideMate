@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const rideSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: [true, "User ID is required"],
@@ -37,18 +37,19 @@ const rideSchema = new mongoose.Schema(
     },
     duration: {
       type: Number, // Assuming duration is in minutes
-      
     },
     distance: {
       type: Number, // Assuming distance is in meter
     },
     paymentId: {
       type: String,
-     
     },
     orderId: {
       type: String,
-     
+    },
+    otp: {
+      type: String,
+      select:false
     },
     signature: {
       type: String,

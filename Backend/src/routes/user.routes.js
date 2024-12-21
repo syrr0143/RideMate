@@ -6,6 +6,9 @@ import {
   logOutUser,
   generateNewToken
 } from "../controller/user.controller.js";
+import {
+  RideCreateController,AllRideFare
+} from "../controller/Ride.controller.js";
 import { getCoordinates, getDistanceAndETA,getSuggestions} from '../controller/map.controller.js'
 import {
   signUpInputValidation,
@@ -23,5 +26,7 @@ router.post("/get-token", authenticate, generateNewToken);
 router.post("/get-coordinates", authenticate, getCoordinates);
 router.post("/distance-eta", authenticate, getDistanceAndETA);
 router.post("/location-suggestion", authenticate,getSuggestions );
+router.post("/create-ride", authenticate, RideCreateController);
+router.post("/fare-details", authenticate, AllRideFare);
 
 export default router;

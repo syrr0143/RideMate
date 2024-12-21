@@ -5,7 +5,16 @@ import { GiPathDistance } from "react-icons/gi";
 import { FiRefreshCcw } from "react-icons/fi";
 import { BrandLogo } from "../index";
 import AcceptRidePopup from "./AcceptRidePopup";
+import useAuth from "../../hooks/useAuth";
+
+ const VehicleImageSrc = {
+   car: "/LandingPage/car.webp",
+   auto: "/LandingPage/auto.jpeg",
+   bike: "/LandingPage/bike.jpeg",
+};
+ 
 const DashBoard = () => {
+  const { captain } = useAuth();
   const handleRefresh = () => {
     window.location.reload();
   };
@@ -27,7 +36,10 @@ const DashBoard = () => {
             />
           </div>
 
-          <p className="text-lg font-bold capitalize">Sumit yadav</p>
+          <p className="text-lg font-bold capitalize">{captain?.fullName}</p>
+        </div>
+        <div>
+          <img className="w-24 h-24 rounded-full" src={VehicleImageSrc[captain?.vehicle.vehicleType]} alt="" />
         </div>
         <div className="text-center items-center flex flex-col justify-center">
           <p className="text-xl font-bold capitalize ">₹500</p>

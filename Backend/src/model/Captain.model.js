@@ -25,6 +25,18 @@ const vehicleSchema = new mongoose.Schema({
     },
     required: [true, "Vehicle type is required"],
   },
+  earning: {
+    type: String
+  },
+  distanceCovered: {
+    type: String
+  },
+  timeSpent: {
+    type: String
+  },
+  averageSpeed: {
+    type: String
+  },
 });
 
 const locationSchema = new mongoose.Schema({
