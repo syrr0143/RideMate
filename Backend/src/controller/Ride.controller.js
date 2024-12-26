@@ -5,7 +5,9 @@ import { createRide, RideFares } from "../services/Ride.service.js";
 import {
   calculateDistanceAndETA,
   fetchCoordinatesFromAddress,
+  getCaptainsWithinRadius,
 } from "../services/map.service.js";
+import { sendMessageToSocketId } from "../socket.js";
 
 const RideCreateController = async (req, res, next) => {
   try {
@@ -33,12 +35,27 @@ const RideCreateController = async (req, res, next) => {
       distance: distanceCalculated,
       duration: timeCalculated,
     });
-    console.log("newride created is ", newRide);
 
-    return res.status(201).json({
+    res.status(201).json({
       sucess: true,
       ride: newRide,
       message: "Ride is created successfully",
+    });
+
+    const { latitude: destLat, longitude: destLng } = originCoords;
+
+    const captainInRadius = await getCaptainsWithinRadius(
+      destLat,
+      destLng,
+      20000
+    );
+    newRide.otp = "";
+    captainInRadius.map(async (captain) => {
+      console.log("emiting new ride to captain", captain?.socketId);
+      sendMessageToSocketId(captain?.socketId, {
+        event: "new-ride",
+        data: newRide,
+      });
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

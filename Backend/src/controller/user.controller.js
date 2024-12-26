@@ -52,7 +52,6 @@ const loginUser = async (req, res, next) => {
     const authToken = await generateToken(userFound._id, "user", "auth");
     const refreshToken = await generateToken(userFound._id, "user", "refresh");
     userFound.refreshToken = refreshToken;
-    console.log("for user refresh token is ", refreshToken);
     await userFound.save();
     res.cookie("token", authToken, authTokenOption);
     return res.status(200).json({

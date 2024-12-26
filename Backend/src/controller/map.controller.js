@@ -1,9 +1,10 @@
 import {
   calculateDistanceAndETA,
-  fetchCoordinatesFromAddress,fetchSuggestions
+  fetchCoordinatesFromAddress,
+  fetchSuggestions,
 } from "../services/map.service.js";
 import { AppError } from "../utils/errorHandler.utils.js";
-
+import CaptainModel from "../model/Captain.model.js";
 // Controller for getting coordinates
 const getCoordinates = async (req, res, next) => {
   const { address } = req.body;
@@ -81,4 +82,4 @@ const getSuggestions = async (req, res, next) => {
   }
 };
 
-export { getCoordinates, getDistanceAndETA,getSuggestions };
+export { getCoordinates, getDistanceAndETA, getSuggestions };

@@ -22,7 +22,8 @@ const Home = () => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-
+           
+           
             socket.emit("update-captain-location", {
               userId: user?._id,
               location: {
@@ -41,8 +42,21 @@ const Home = () => {
     };
     const locationInterval = setInterval(updateLocation, 10000);
     updateLocation();
-    return () => clearInterval(locationInterval);
-  }, [user, socket]);
+  return () => clearInterval(locationInterval);
+  }, [user,socket]);
+
+    
+    useEffect(() => {
+      console.log("Socket instance:", socket); // Debugging socket instance
+      socket.on("new-ride", (data) => {
+        console.log("New ride received:", data); // Debug the received event
+        
+      });
+
+      return () => {
+        socket.off("new-ride");
+      };
+    }, [socket]);
 
   useEffect(() => {
     checkAndRefreshToken();

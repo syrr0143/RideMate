@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import {
   generateNewTokenForUser,
-  getCaptainProfile,getUserProfile
+  getCaptainProfile,
+  getUserProfile,
 } from "../utils/apiHandling";
 
 const AuthContext = createContext(undefined);
@@ -25,7 +26,7 @@ function AuthProvider({ children }) {
         const currentTime = Date.now() / 1000; // Current time in seconds
 
         if (decoded.exp && decoded.exp < currentTime) {
-          // Token is expired, get a new token
+         
           console.log("Token has expired, refreshing...");
           const response = await generateNewTokenForUser(token);
           console.log("response is ", response);
@@ -62,15 +63,15 @@ function AuthProvider({ children }) {
       if (token && userRole === "captain") {
         try {
           const profile = await getCaptainProfile(token);
-          setCaptain(profile.data.captain)
+          setUser(profile.data.captain);
+          // setCaptain(profile.data.captain);
         } catch (error) {
           console.error("Error fetching captain profile:", error);
         }
-      }
-      else if (token && userRole === "user") {
+      } else if (token && userRole === "user") {
         try {
           const profile = await getUserProfile(token);
-          setUser(profile.data.user)
+          setUser(profile.data.user);
         } catch (error) {
           console.error("Error fetching captain profile:", error);
         }
@@ -109,7 +110,7 @@ function AuthProvider({ children }) {
         setLoading,
         checkAndRefreshToken,
         captain,
-        user
+        user,
       }}
     >
       {children}

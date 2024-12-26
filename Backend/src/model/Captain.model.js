@@ -40,13 +40,13 @@ const vehicleSchema = new mongoose.Schema({
 });
 
 const locationSchema = new mongoose.Schema({
-  latitude: {
-    type: Number,
-    // required: [true, "Latitude is required"],
+  type: {
+    type: String,
+    enum: ["Point"],
+    default: "Point",
   },
-  longitude: {
-    type: Number,
-    // required: [true, "Longitude is required"],
+  coordinates: {
+    type: [Number], // [longitude, latitude]
   },
 });
 

@@ -25,7 +25,8 @@ import {
   MakePayment,
 } from "./components/index.jsx";
 import DashBoard from "./components/Captain_Component/DashBoard.jsx";
-import Ride from './pages/Captain/Ride.jsx'
+import Ride from "./pages/Captain/Ride.jsx";
+import CaptainHome from "./pages/Captain/CaptainHome.jsx";
 const App = () => {
   return (
     <div>
@@ -66,14 +67,14 @@ const App = () => {
           </Route>
         </Route>
         <Route element={<ProtectedRoute allowedRoles={["captain"]} />}>
-          <Route path="/captain/home" element={<Home />}>
+          <Route path="/captain/home" element={<CaptainHome />}>
             <Route index element={<DashBoard />} />
             <Route path="chose-vehicle" element={<ChoseVehicle />} />
             <Route path="confirm-ride" element={<ConfirmRide />} />
             <Route path="driver-assigned" element={<DriverAssigned />} />
             <Route path="make-payment" element={<MakePayment />} />
           </Route>
-          <Route path="/captain/ride" element={ <Ride/>} />
+          <Route path="/captain/ride" element={<Ride />} />
         </Route>
       </Routes>
     </div>

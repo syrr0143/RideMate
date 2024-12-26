@@ -36,7 +36,6 @@ const generateToken = (userId, role, tokenType) => {
 };
 const verifyJwt = async (token, tokenType) => {
   try {
-    console.log("token in verifyjwt is ", token, tokenType);
     const secret =
       tokenType === "auth"
         ? process.env.AUTH_JWT_SECRET
@@ -64,7 +63,6 @@ const verifyJwt = async (token, tokenType) => {
 const decodeTokenWithoutVerify = (token) => {
   try {
     const decoded = jwt.decode(token, { complete: true }); // No verification here
-    console.log("decode in twv", decoded);
     if (!decoded || !decoded.payload.userId) {
       throw new AppError({
         statusCode: 401,

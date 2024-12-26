@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { AppError } from '../utils/errorHandler.utils.js';
-
+import CaptainModel from '../model/Captain.model.js';
 // Service function to fetch coordinates using Mapbox API
 const fetchCoordinatesFromAddress = async (address) => {
   const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -90,4 +90,22 @@ const fetchSuggestions = async (query) => {
   }
 };
 
-export { fetchCoordinatesFromAddress,calculateDistanceAndETA , fetchSuggestions };
+const getCaptainsWithinRadius = async (latitude, longitude, radius) => {
+  try {
+    return CaptainModel.find({
+      location: {
+        $geoWithin: {
+          $centerSphere: [[longitude, latitude], radius / 6378.1], // Radius in radians (Earth radius in km)
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error in getCaptainsWithinRadius:", error.message);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(error.message || "Failed to get captains");
+  }
+};
+
+export { fetchCoordinatesFromAddress,calculateDistanceAndETA , fetchSuggestions, getCaptainsWithinRadius };

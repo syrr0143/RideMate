@@ -33,7 +33,7 @@ async function createRide({
       distance: distance,
       otp: otp,
     };
-    console.log("new ride is ", newRide);
+  
     const savedRide = await RideModel.create(newRide);
     return savedRide;
   } catch (error) {

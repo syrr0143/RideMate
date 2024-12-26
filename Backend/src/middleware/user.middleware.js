@@ -16,22 +16,18 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: "No token provided" });
     }
     const decoded = await verifyJwt(token, "auth");
-    console.log("decoded is ", decoded);
     const userFounds = await userModel
       .findById(decoded.userId)
       .select("+refreshToken");
-    console.log("user found with rt is try is ", userFounds);
     req.user = decoded;
     if (decoded.role != "user") {
       throw new AppError("access denied", 401);
     }
     return next();
   } catch (error) {
-    console.log("errorfor token expired is ", error);
-    console.log("token is  ", token);
+    
     if (error instanceof TokenExpiredError) {
       try {
-        console.log("token is expired");
         const { userId, role } = decodeTokenWithoutVerify(token);
         if (!userId) {
           throw new AppError("Invalid token data", 401);
@@ -40,18 +36,16 @@ const authenticate = async (req, res, next) => {
           throw new AppError("access denied", 401);
         }
         // find if rt is present in db
-        console.log("find rt from user db");
         const userFound = await userModel
           .findById(userId)
           .select("+refreshToken");
-        console.log("user found with rt is", userFound);
 
         if (!userFound || !userFound.refreshToken) {
           throw new AppError("Unauthorized access", 401);
         }
         try {
           await verifyJwt(userFound.refreshToken, "refresh");
-          console.log("validating rt");
+        
           const newRefreshToken = await generateToken(
             userId,
             "user",
