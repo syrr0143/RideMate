@@ -6,6 +6,10 @@ import {
   signUpCaptain,
 } from "../controller/captain.controller.js";
 import {
+  confirmRideByCaptain,
+  getAllRideAvailable,
+} from "../controller/Ride.controller.js";
+import {
   loginInputValidation,
   signUpInputValidation,
 } from "../middleware/inputValidatorMiddleware/captainInput.js";
@@ -16,5 +20,7 @@ router.post("/signup", signUpInputValidation, signUpCaptain);
 router.post("/login", loginInputValidation, loginCaptain);
 router.get("/profile", authenticate, captainProfile);
 router.post("/logout", authenticate, logOutCaptain);
+router.post("/confirm-ride", authenticate, confirmRideByCaptain);
+router.get("/available-rides", authenticate, getAllRideAvailable);
 
 export default router;

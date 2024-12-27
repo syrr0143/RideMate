@@ -6,11 +6,14 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useHidden } from "../../hooks/useHidden.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
 import useSocket from "../../hooks/useSocket.jsx";
+import AcceptRidePopup from "../../components/Captain_Component/AcceptRidePopup.jsx";
+
 const Home = () => {
   const { hidden, setHidden } = useHidden();
-  const location = useLocation();
   const { token, loading, user, checkAndRefreshToken } = useAuth();
+  const location = useLocation();
   const { socket } = useSocket();
+  const [newRideData, setNewRideData] = useState(null);
 
   useEffect(() => {
     if (user?._id && user?.role) {
@@ -22,8 +25,7 @@ const Home = () => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-           
-           
+
             socket.emit("update-captain-location", {
               userId: user?._id,
               location: {
@@ -40,23 +42,26 @@ const Home = () => {
         console.error("Geolocation is not supported by this browser.");
       }
     };
-    const locationInterval = setInterval(updateLocation, 10000);
+    const locationInterval = setInterval(updateLocation, 1000000);
     updateLocation();
-  return () => clearInterval(locationInterval);
-  }, [user,socket]);
+    return () => clearInterval(locationInterval);
+  }, [user, socket]);
 
-    
-    useEffect(() => {
-      console.log("Socket instance:", socket); // Debugging socket instance
-      socket.on("new-ride", (data) => {
-        console.log("New ride received:", data); // Debug the received event
-        
-      });
+  useEffect(() => {
+    console.log("Socket instance:", socket);
+    socket.on("connect", () => {
+      console.log("Socket connected with ID:", socket.id);
+    });
 
-      return () => {
-        socket.off("new-ride");
-      };
-    }, [socket]);
+    socket.on("new-ride", (data) => {
+      console.log("New ride received:", data);
+      setNewRideData(data);
+    });
+
+    return () => {
+      socket.off("new-ride");
+    };
+  }, [socket]);
 
   useEffect(() => {
     checkAndRefreshToken();
@@ -69,6 +74,7 @@ const Home = () => {
       <div className="min-h-screen">
         <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
           {/* <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} /> */}
+          {/* map */}
           <img
             src="/LandingPage/map.jpeg"
             alt=""
@@ -82,6 +88,12 @@ const Home = () => {
         </div>
       </div>
       <BottomNavbar />
+      {newRideData && (
+        <AcceptRidePopup
+          rideData={newRideData}
+          onClose={() => setNewRideData(null)} // Clear ride data to hide popup
+        />
+      )}
     </>
   );
 };

@@ -23,7 +23,7 @@ const Home = () => {
           (position) => {
             const { latitude, longitude } = position.coords;
 
-            socket.emit("update-captain-location", {
+            socket.emit("update-user-location", {
               userId: user?._id,
               location: {
                 latitude,
@@ -43,6 +43,8 @@ const Home = () => {
     updateLocation();
     return () => clearInterval(locationInterval);
   }, [user, socket]);
+
+  
 
   useEffect(() => {
     checkAndRefreshToken();

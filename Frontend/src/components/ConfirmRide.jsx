@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaMapPin, FaUser } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
 import { Button } from "./index";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import useSocket from "../hooks/useSocket";
 const VehicleImageSrc = {
   car: "/LandingPage/car.webp",
   auto: "/LandingPage/auto.jpeg",
@@ -15,15 +16,19 @@ const ConfirmRide = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useAuth();
+  const { socket } = useSocket();
 
   const [loading, setLoading] = useState(false);
+  const [waitingForDriver, setwaitingForDriver] = useState(false);
+  const [CaptainAssigned, setCaptainAssigned] = useState(null);
+  const [otp, setOtp] = useState(""); // Add state for OTP
 
   // Destructure vehicle from location state
   const vehicle = location.state?.vehicle;
-
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setwaitingForDriver(true);
     try {
       const response = await axios.post(
         "http://localhost:3000/api/v1/user/create-ride",
@@ -38,10 +43,12 @@ const ConfirmRide = () => {
           },
         }
       );
-      console.log('res is '.response);
-      //  const rideDetails = response.data.ride;
-      //  navigate("/user/home/driver-assigned", { state: vehicle });
-      
+     const fetchedOtp = response?.data.ride.otp; // Fetch OTP from response
+     setOtp(fetchedOtp); // Store OTP in state
+     console.log("otp is ", fetchedOtp, response);
+      if (response.data.sucess === true) {
+        setwaitingForDriver(true);
+      }
     } catch (error) {
       console.error("Error fetching fare details:", error);
     } finally {
@@ -53,11 +60,25 @@ const ConfirmRide = () => {
     currency: "INR",
   });
 
+  useEffect(() => {
+    socket.on("ride-confirmed", (ride) => {
+      console.log("ride confirmed", ride);
+      setCaptainAssigned(ride?.captain);
+      setwaitingForDriver(false);
+      navigate("/user/home/driver-assigned", {
+        state: { CaptainAssigned: ride?.captain, ride: ride, otp: otp },
+      });
+    });
+  }, [socket, otp , navigate]);
+
   return (
     <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">
       <p className="text-xl font-bold mb-2 text-center">
-        {loading ? "Looking For Nearby Driver..." : "Confirm Your Ride"}
+        {waitingForDriver
+          ? "Looking For Nearby Driver..."
+          : "Confirm Your Ride"}
       </p>
+
       <div className="border-b-2 mb-2 flex justify-center">
         <img
           src={VehicleImageSrc[vehicle.vehicleType]} // Displaying vehicle image
@@ -105,7 +126,7 @@ const ConfirmRide = () => {
       <Button
         onClick={handleClick}
         disabled={loading}
-        loading={loading}
+        loading={loading || waitingForDriver}
         name={"Confirm Ride"}
         style={"bg-green-500 text-white cursor-pointer font-bold text-md"}
       />

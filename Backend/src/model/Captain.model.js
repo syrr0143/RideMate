@@ -100,5 +100,5 @@ const captainSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const CaptainModel = mongoose.model("Captain", captainSchema);
+const CaptainModel = mongoose.model("captain", captainSchema);
 export default CaptainModel;

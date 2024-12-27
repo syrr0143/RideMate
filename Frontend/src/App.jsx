@@ -69,10 +69,6 @@ const App = () => {
         <Route element={<ProtectedRoute allowedRoles={["captain"]} />}>
           <Route path="/captain/home" element={<CaptainHome />}>
             <Route index element={<DashBoard />} />
-            <Route path="chose-vehicle" element={<ChoseVehicle />} />
-            <Route path="confirm-ride" element={<ConfirmRide />} />
-            <Route path="driver-assigned" element={<DriverAssigned />} />
-            <Route path="make-payment" element={<MakePayment />} />
           </Route>
           <Route path="/captain/ride" element={<Ride />} />
         </Route>

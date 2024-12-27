@@ -4,12 +4,12 @@ const rideSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: [true, "User ID is required"],
     },
     captain: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "captain",
     },
     pickup: {
       type: String,
@@ -49,7 +49,7 @@ const rideSchema = new mongoose.Schema(
     },
     otp: {
       type: String,
-      select:false
+      select: false,
     },
     signature: {
       type: String,
@@ -60,5 +60,5 @@ const rideSchema = new mongoose.Schema(
   }
 );
 
-const RideModel = mongoose.model("Ride", rideSchema);
+const RideModel = mongoose.model("ride", rideSchema);
 export default RideModel;

@@ -73,7 +73,9 @@ function initializeSocket(server) {
 
 function sendMessageToSocketId(socketId, messageObject) {
   if (io) {
-    io.to(socketId).emit(messageObject?.event, messageObject?.data); // Emit the "new-ride" event
+    console.log("Sending message to socket:", socketId);
+    console.log("Message object:", messageObject);
+    io.to(socketId).emit(messageObject?.event, messageObject?.data);
   } else {
     console.log("Socket is not initialized");
   }

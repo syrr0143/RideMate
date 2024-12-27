@@ -15,7 +15,8 @@ async function createRide({
       userId,
       status: { $in: ["pending", "accepted", "in-progress"] },
     });
-    if (isRideActive) {
+    // TODO WARNING remove ! later
+    if (!isRideActive) {
       throw new AppError(
         `User already has an active ride. Complete or cancel the ongoing ride before creating a new one.`,
         404
@@ -33,7 +34,7 @@ async function createRide({
       distance: distance,
       otp: otp,
     };
-  
+
     const savedRide = await RideModel.create(newRide);
     return savedRide;
   } catch (error) {
@@ -50,7 +51,38 @@ async function RideFares(distance, duration) {
     const allFareOption = calculateFare(distance, duration);
     return allFareOption;
   } catch (error) {
-    console.error("Error calculating the fare for the ride from service:", error.message);
+    console.error(
+      "Error calculating the fare for the ride from service:",
+      error.message
+    );
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(error.message || "Internal server error");
+  }
+}
+async function confirmRideByCaptainService(rideId, captainId) {
+  try {
+    await RideModel.findOneAndUpdate(
+      { _id: rideId },
+      {
+        status: "accepted",
+        captain: captainId,
+      }
+    );
+    const ride = await RideModel.findOne({ _id: rideId })
+      .populate("userId")
+      .populate("captain");
+    if (!ride) {
+      throw new AppError(`no ride with this id available.`, 404);
+    }
+
+    return ride;
+  } catch (error) {
+    console.error(
+      "Error calculating the fare for the ride from service:",
+      error.message
+    );
     if (error instanceof AppError) {
       throw error;
     }
@@ -58,4 +90,4 @@ async function RideFares(distance, duration) {
   }
 }
 
-export { createRide, RideFares };
+export { createRide, RideFares, confirmRideByCaptainService };

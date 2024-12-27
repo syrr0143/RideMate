@@ -4,13 +4,20 @@ import { IoIosSend } from "react-icons/io";
 import { MdHealthAndSafety, MdEmergencyShare } from "react-icons/md";
 import { IoCallSharp } from "react-icons/io5";
 import { FaMapPin } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 const DriverAssigned = () => {
+  const location = useLocation();
+  const driverDetails = location.state?.CaptainAssigned;
+  const rideDetails = location.state?.ride;
+  const otp = location.state?.otp;
+  console.log("rideDetails is ", location.state);
+
   return (
     <div className="m-2">
       <div className="flex justify-between items-center mb-2">
-        <p className="text-lg font-bold">Meet at this Checkpoint </p>
+        <p className="text-lg font-bold">OTP for the ride is </p>
         <p className="bg-black rounded text-lg font-bold text-white p-3 ">
-          2 min
+          {otp}
         </p>
       </div>
       <div>
@@ -22,11 +29,13 @@ const DriverAssigned = () => {
           </div>
           <div>
             <p className="text-md font-semibold text-gray-400 capitalize">
-              sumit yadav
+              {driverDetails?.fullName}
             </p>
-            <p className="text-md font-bold text-xl uppercase">ka15ak00-0</p>
+            <p className="text-md font-bold text-xl uppercase">
+              {driverDetails?.vehicle.numberPlate}
+            </p>
             <p className="text-md font-semibold capitalize text-gray-400">
-              white scorpio s-presso lxi
+              {driverDetails?.vehicle.vehicleType}
             </p>
             <p className="text-md font-semibold capitalize text-gray-400 items-center flex gap-2">
               <span>
@@ -78,12 +87,11 @@ const DriverAssigned = () => {
           <div>
             <p className="font-bold text-md inline mr-4 capitalize">
               {" "}
-              Third wave coffee{" "}
+              {rideDetails?.destination.split(",")[0]}{" "}
             </p>
             <p className="font-medium text-sm text-gray-400 block  capitalize">
               {" "}
-              17th cross road, pwd quarter, 1st sector, HSR layout, bengaluru ,
-              karaatak{" "}
+              {rideDetails?.destination}{" "}
             </p>
           </div>
         </div>
