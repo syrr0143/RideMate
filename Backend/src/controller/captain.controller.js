@@ -109,6 +109,10 @@ const captainProfile = async (req, res, next) => {
         vehicle: captainFound.vehicle,
         location: captainFound?.location,
         role: captainFound.role,
+        earning: captainFound.earning,
+        distanceCovered: captainFound.distanceCovered,
+        timeSpent: captainFound.timeSpent,
+        averageSpeed: captainFound.averageSpeed,
       },
     });
   } catch (error) {
@@ -144,6 +148,7 @@ const logOutCaptain = async (req, res, next) => {
     next(new AppError("Internal server error", 500));
   }
 };
+
 
 
 

@@ -10,6 +10,7 @@ const InputBox = ({
   label,
   placeholder,
   type = "text",
+  max,
 }) => {
   return (
     <>
@@ -18,6 +19,7 @@ const InputBox = ({
           <span className="label-text">{label}</span>
         </div>
         <input
+          max={max}
           onFocus={onFocus}
           type={type}
           name={name}

@@ -5,7 +5,9 @@ import { AppError } from "../utils/errorHandler.utils.js";
 async function createRide({
   userId,
   pickup,
+  pickupCoords,
   destination,
+  destinationCoords,
   vehicleType,
   distance,
   duration,
@@ -15,8 +17,8 @@ async function createRide({
       userId,
       status: { $in: ["pending", "accepted", "in-progress"] },
     });
-    // TODO WARNING remove ! later
-    if (!isRideActive) {
+
+    if (isRideActive) {
       throw new AppError(
         `User already has an active ride. Complete or cancel the ongoing ride before creating a new one.`,
         404
@@ -24,10 +26,14 @@ async function createRide({
     }
     const allFareOption = calculateFare(distance, duration);
     const otp = generateOtp();
+
+    console.log("pickupCoords", pickupCoords);
     const newRide = {
       userId,
       pickup: pickup,
+      pickupCoords: pickupCoords,
       destination: destination,
+      destinationCoords: destinationCoords,
       fare: allFareOption[vehicleType],
       vehicleType: vehicleType,
       duration: duration,
@@ -90,4 +96,29 @@ async function confirmRideByCaptainService(rideId, captainId) {
   }
 }
 
-export { createRide, RideFares, confirmRideByCaptainService };
+async function checkOtp(rideId, otp) {
+  try {
+    const ride = await RideModel.findById(rideId)
+      .select("+otp")
+      .populate("userId");
+    if (!ride) {
+      throw new AppError(`no ride with this id available.`, 404);
+    }
+    if (otp != ride?.otp) {
+      console.log("ride otp and otp is ", ride?.otp, otp, ride);
+      throw new AppError(`invalid otp.`, 401);
+    }
+    ride.status = "accepted";
+    await ride.save();
+
+    return ride;
+  } catch (error) {
+    console.error("Error checking the otp:", error.message);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(error.message || "Internal server error");
+  }
+}
+
+export { createRide, RideFares, confirmRideByCaptainService, checkOtp };

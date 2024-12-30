@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaStar } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
 import { MdHealthAndSafety, MdEmergencyShare } from "react-icons/md";
 import { IoCallSharp } from "react-icons/io5";
 import { FaMapPin } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useSocket from "../hooks/useSocket";
 const DriverAssigned = () => {
+  const { socket } = useSocket();
+  const navigate = useNavigate();
   const location = useLocation();
   const driverDetails = location.state?.CaptainAssigned;
   const rideDetails = location.state?.ride;
   const otp = location.state?.otp;
   console.log("rideDetails is ", location.state);
+  useEffect(() => {
+    socket.on("otp-success", (ride) => {
+      console.log("otp-success", ride);
+      navigate("/user/live-track", {
+        state: {
+          CaptainAssigned: ride?.captain,
+          ride: ride,
+          destinationCoords: ride?.destinationCoords,
+        },
+      });
+    });
+  }, [socket, otp, navigate]);
 
   return (
     <div className="m-2">

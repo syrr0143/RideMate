@@ -6,6 +6,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useHidden } from "../../hooks/useHidden.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
 import useSocket from "../../hooks/useSocket.jsx";
+import Map from "../../components/Map.jsx";
+
 const Home = () => {
   const { hidden, setHidden } = useHidden();
   const location = useLocation();
@@ -44,24 +46,22 @@ const Home = () => {
     return () => clearInterval(locationInterval);
   }, [user, socket]);
 
-  
-
   useEffect(() => {
     checkAndRefreshToken();
   }, [location.pathname]);
   if (loading) {
     return <Loader />;
   }
+  const handleLocationUpdate = ({ latitude, longitude }) => {
+    // Handle location updates if needed
+    console.log("Current position:", latitude, longitude);
+  };
   return (
     <>
       <div className="min-h-screen">
         <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
+          <Map onLocationUpdate={handleLocationUpdate} />
           {/* <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} /> */}
-          <img
-            src="/LandingPage/map.jpeg"
-            alt=""
-            className="object-cover h-full w-full"
-          />
         </div>
         <div className="pb-20">
           <div className="overflow-scroll">

@@ -1,18 +1,18 @@
 import axios from "axios";
-const baseurl = import.meta.env.VITE_API_URL;
+import { baseUrl } from "../config/Api.js";
 
 const userSignUp = async (userInput) => {
-  console.log("baseurl is ", baseurl);
-  return axios.post(`${baseurl}/user/signup`, userInput);
+  console.log("baseurl is ", baseUrl);
+  return axios.post(`${baseUrl}/user/signup`, userInput);
 };
 
 const userLogin = async (credentials) => {
-  return axios.post(`${baseurl}/user/login`, credentials);
+  return axios.post(`${baseUrl}/user/login`, credentials);
 };
 const generateNewTokenForUser = async (token) => {
   try {
     const response = await axios.post(
-      `${baseurl}/user/get-token`,
+      `${baseUrl}/user/get-token`,
       {}, // Body of the POST request (empty object since no body is needed)
       {
         headers: {
@@ -28,20 +28,20 @@ const generateNewTokenForUser = async (token) => {
 };
 
 const captainSignUp = async (captainInput) => {
-  return axios.post(`${baseurl}/captain/signup`, captainInput);
+  return axios.post(`${baseUrl}/captain/signup`, captainInput);
 };
 
 const captainLogin = async (credentials) => {
-  return axios.post(`${baseurl}/captain/login`, credentials);
+  return axios.post(`${baseUrl}/captain/login`, credentials);
 };
 
 const getCaptainProfile = async (token) => {
-  return axios.get(`${baseurl}/captain/profile`, {
+  return axios.get(`${baseUrl}/captain/profile`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 const getUserProfile = async (token) => {
-  return axios.get(`${baseurl}/user/profile`, {
+  return axios.get(`${baseUrl}/user/profile`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

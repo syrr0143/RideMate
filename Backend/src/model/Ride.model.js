@@ -16,10 +16,16 @@ const rideSchema = new mongoose.Schema(
       required: [true, "Pickup location is required"],
       trim: true,
     },
+    pickupCoords: {
+      type: [Number],
+    },
     destination: {
       type: String,
       required: [true, "Destination location is required"],
       trim: true,
+    },
+    destinationCoords: {
+      type: [Number],
     },
     fare: {
       type: Number,

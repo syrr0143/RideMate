@@ -25,18 +25,6 @@ const vehicleSchema = new mongoose.Schema({
     },
     required: [true, "Vehicle type is required"],
   },
-  earning: {
-    type: String
-  },
-  distanceCovered: {
-    type: String
-  },
-  timeSpent: {
-    type: String
-  },
-  averageSpeed: {
-    type: String
-  },
 });
 
 const locationSchema = new mongoose.Schema({
@@ -87,6 +75,22 @@ const captainSchema = mongoose.Schema(
     role: {
       type: String,
       default: "captain",
+    },
+    earning: {
+      type: Number,
+      default: 0,
+    },
+    distanceCovered: {
+      type: Number,
+      default: 0,
+    },
+    timeSpent: {
+      type: Number,
+      default: 0,
+    },
+    averageSpeed: {
+      type: Number,
+      default: 0,
     },
     vehicle: vehicleSchema,
     location: locationSchema,

@@ -6,6 +6,7 @@ import { LocationSearchResult } from "../components/index.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useHidden } from "../hooks/useHidden.jsx";
 import { Button } from "../components/index.jsx";
+import { baseUrl } from "../config/Api.js";
 import axios from "axios";
 import useAuth from "../hooks/useAuth.jsx";
 
@@ -45,7 +46,7 @@ const FindTrip = () => {
   const fetchLocationSuggestion = async (query) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/location-suggestion",
+        `${baseUrl}/user/location-suggestion`,
         { query }, // Send query in the body
         {
           headers: {
@@ -74,7 +75,7 @@ const FindTrip = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/fare-details",
+        `${baseUrl}/user/fare-details`,
         tripData, // Send tripData in the request body
         {
           headers: {

@@ -1,6 +1,6 @@
-import axios from 'axios'
-import { AppError } from '../utils/errorHandler.utils.js';
-import CaptainModel from '../model/Captain.model.js';
+import axios from "axios";
+import { AppError } from "../utils/errorHandler.utils.js";
+import CaptainModel from "../model/Captain.model.js";
 // Service function to fetch coordinates using Mapbox API
 const fetchCoordinatesFromAddress = async (address) => {
   const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -11,10 +11,7 @@ const fetchCoordinatesFromAddress = async (address) => {
     const response = await axios.get(mapboxUrl);
 
     if (response.data.features.length === 0) {
-      throw new AppError(
-        "No location found",
-        404
-      ); // No location found
+      throw new AppError("No location found", 404); // No location found
     }
 
     const locationData = response.data.features[0];
@@ -43,7 +40,7 @@ const calculateDistanceAndETA = async (origin, destination) => {
     const response = await axios.get(directionsUrl);
 
     if (!response.data.routes || response.data.routes.length === 0) {
-     throw new AppError("No route found", 404); // No route found
+      throw new AppError("No route found", 404); // No route found
     }
 
     const route = response.data.routes[0];
@@ -55,10 +52,10 @@ const calculateDistanceAndETA = async (origin, destination) => {
     };
   } catch (error) {
     console.error("Error in calculateDistanceAndETA:", error.message);
-     if (error instanceof AppError) {
-       throw error;
-     }
-     throw new AppError(error.message || "Internal server error");
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(error.message || "Internal server error");
   }
 };
 
@@ -71,7 +68,7 @@ const fetchSuggestions = async (query) => {
     const response = await axios.get(mapboxUrl);
 
     if (response.data.features.length === 0) {
-     throw new AppError("No match found", 404);
+      throw new AppError("No match found", 404);
     }
 
     return response.data.features.map((feature) => ({
@@ -108,4 +105,9 @@ const getCaptainsWithinRadius = async (latitude, longitude, radius) => {
   }
 };
 
-export { fetchCoordinatesFromAddress,calculateDistanceAndETA , fetchSuggestions, getCaptainsWithinRadius };
+export {
+  fetchCoordinatesFromAddress,
+  calculateDistanceAndETA,
+  fetchSuggestions,
+  getCaptainsWithinRadius,
+};

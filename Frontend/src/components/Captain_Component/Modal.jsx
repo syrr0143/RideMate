@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaMapPin, FaMapMarkerAlt } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
-import { Button, InputBox } from "../index";
+import { Button, InputBox, Loader } from "../index";
 import RideStatusBadge from "../RideStatusBadge";
 
 const Modal = ({
@@ -11,6 +11,7 @@ const Modal = ({
   message,
   rideData,
   showForm,
+  loading = false,
   status,
   button1 = true,
   button2 = true,
@@ -31,13 +32,13 @@ const Modal = ({
     }
   };
 
-   const handleAccept = () => {
-     if (showForm && OnAccept) {
-       OnAccept(otp); // Pass the OTP to the parent component
-     } else {
-       OnAccept();
-     }
-   };
+  const handleAccept = () => {
+    if (showForm && OnAccept) {
+      OnAccept(otp); // Pass the OTP to the parent component
+    } else {
+      OnAccept();
+    }
+  };
   return (
     <div>
       {isModalOpen && (
@@ -114,8 +115,9 @@ const Modal = ({
             </div>
             {showForm && (
               <InputBox
+                max={6}
                 type="number"
-                inputStyle={"text-lg font-bold"}
+                inputStyle={"text-lg font-bold text-black"}
                 placeholder={"Enter OTP to confirm"}
                 value={otp}
                 name={"otp"}
@@ -123,14 +125,17 @@ const Modal = ({
               />
             )}
             <div className="modal-action">
-              {button1 && (
-                <Button
-                  name={button1Name}
-                  style={"font-bold"}
-                  onClick={closeModal}
-                  disabled={showForm ? true : false}
-                />
-              )}
+              {button1 &&
+                (loading ? (
+                  <Loader />
+                ) : (
+                  <Button
+                    name={button1Name}
+                    style={"font-bold"}
+                    onClick={closeModal}
+                    disabled={showForm ? true : false}
+                  />
+                ))}
               {button2 && (
                 <Button
                   name={button2Name}

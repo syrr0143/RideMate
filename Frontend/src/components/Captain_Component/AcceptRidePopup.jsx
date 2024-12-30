@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import useSocket from "../../hooks/useSocket";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { baseUrl } from "../../config/Api.js";
 
 const AcceptRidePopup = ({ rideData, onClose }) => {
-  const [isConfirmRideOpen, setIsConfirmRideOpen] = useState(false);
   const [isNewRideModalOpen, setisNewRideModalOpen] = useState(rideData);
   const { token } = useAuth();
   const { socket } = useSocket();
@@ -15,15 +15,17 @@ const AcceptRidePopup = ({ rideData, onClose }) => {
   const handleAcceptRide = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/captain/confirm-ride",
+        `${baseUrl}/captain/confirm-ride`,
         { rideId: rideData._id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       console.log("response after ride aaccept is ", response);
-      setIsConfirmRideOpen(true);
-     setisNewRideModalOpen(false);
+      setisNewRideModalOpen(false);
+      navigate("/captain/reach-user-location", {
+        state: { rideData },
+      });
     } catch (error) {
       console.log("error", error);
     }
@@ -31,20 +33,6 @@ const AcceptRidePopup = ({ rideData, onClose }) => {
 
   const handleIgnoreRide = () => {
     onClose(); // Close the popup
-  };
-
-  const finishRide = async(otp) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/captain/confirm-ride"
-      );
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  const handleCancelRide = () => {
-    setIsConfirmRideOpen(false);
   };
 
   return (
@@ -56,14 +44,6 @@ const AcceptRidePopup = ({ rideData, onClose }) => {
         closeModal={handleIgnoreRide}
         isModalOpen={isNewRideModalOpen}
         showForm={false}
-        rideData={rideData}
-      />
-      <Modal
-        message={"Ask user for OTP"}
-        OnAccept={finishRide}
-        closeModal={handleCancelRide}
-        isModalOpen={isConfirmRideOpen}
-        showForm={true}
         rideData={rideData}
       />
     </>

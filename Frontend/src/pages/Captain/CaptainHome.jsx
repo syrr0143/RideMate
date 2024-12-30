@@ -7,6 +7,7 @@ import { useHidden } from "../../hooks/useHidden.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
 import useSocket from "../../hooks/useSocket.jsx";
 import AcceptRidePopup from "../../components/Captain_Component/AcceptRidePopup.jsx";
+import Map from "../../components/Map.jsx";
 
 const Home = () => {
   const { hidden, setHidden } = useHidden();
@@ -42,7 +43,7 @@ const Home = () => {
         console.error("Geolocation is not supported by this browser.");
       }
     };
-    const locationInterval = setInterval(updateLocation, 1000000);
+    const locationInterval = setInterval(updateLocation, 10000);
     updateLocation();
     return () => clearInterval(locationInterval);
   }, [user, socket]);
@@ -69,17 +70,18 @@ const Home = () => {
   if (loading) {
     return <Loader />;
   }
+  const handleLocationUpdate = ({ latitude, longitude }) => {
+    // Handle location updates if needed
+    console.log("Current position:", latitude, longitude);
+  };
+
   return (
     <>
       <div className="min-h-screen">
         <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
           {/* <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} /> */}
           {/* map */}
-          <img
-            src="/LandingPage/map.jpeg"
-            alt=""
-            className="object-cover h-full w-full"
-          />
+          <Map onLocationUpdate={handleLocationUpdate} />
         </div>
         <div className="pb-20">
           <div className="overflow-scroll">

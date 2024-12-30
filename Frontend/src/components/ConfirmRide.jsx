@@ -6,6 +6,7 @@ import { Button } from "./index";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import useSocket from "../hooks/useSocket";
+import { baseUrl } from "../config/Api.js";
 const VehicleImageSrc = {
   car: "/LandingPage/car.webp",
   auto: "/LandingPage/auto.jpeg",
@@ -31,7 +32,7 @@ const ConfirmRide = () => {
     setwaitingForDriver(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/create-ride",
+        `${baseUrl}/user/create-ride`,
         {
           pickup: vehicle.source,
           destination: vehicle.destination,
@@ -43,9 +44,9 @@ const ConfirmRide = () => {
           },
         }
       );
-     const fetchedOtp = response?.data.ride.otp; // Fetch OTP from response
-     setOtp(fetchedOtp); // Store OTP in state
-     console.log("otp is ", fetchedOtp, response);
+      const fetchedOtp = response?.data.ride.otp; // Fetch OTP from response
+      setOtp(fetchedOtp); // Store OTP in state
+      console.log("otp is ", fetchedOtp, response);
       if (response.data.sucess === true) {
         setwaitingForDriver(true);
       }
@@ -69,7 +70,7 @@ const ConfirmRide = () => {
         state: { CaptainAssigned: ride?.captain, ride: ride, otp: otp },
       });
     });
-  }, [socket, otp , navigate]);
+  }, [socket, otp, navigate]);
 
   return (
     <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">

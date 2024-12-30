@@ -24,9 +24,13 @@ import {
   DriverAssigned,
   MakePayment,
 } from "./components/index.jsx";
+
+import LiveTracking from "./pages/Common/LiveTrackinng.jsx";
+
 import DashBoard from "./components/Captain_Component/DashBoard.jsx";
-import Ride from "./pages/Captain/Ride.jsx";
+
 import CaptainHome from "./pages/Captain/CaptainHome.jsx";
+import ReachUserLocation from "./pages/Captain/ReachUserLocation.jsx";
 const App = () => {
   return (
     <div>
@@ -65,12 +69,17 @@ const App = () => {
             <Route path="driver-assigned" element={<DriverAssigned />} />
             <Route path="make-payment" element={<MakePayment />} />
           </Route>
+          <Route path="/user/live-track" element={<LiveTracking />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={["captain"]} />}>
           <Route path="/captain/home" element={<CaptainHome />}>
             <Route index element={<DashBoard />} />
           </Route>
-          <Route path="/captain/ride" element={<Ride />} />
+          <Route path="/captain/live-track" element={<LiveTracking />} />
+          <Route
+            path="/captain/reach-user-location"
+            element={<ReachUserLocation />}
+          />
         </Route>
       </Routes>
     </div>

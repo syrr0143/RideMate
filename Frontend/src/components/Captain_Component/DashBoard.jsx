@@ -8,6 +8,7 @@ import AcceptRidePopup from "./AcceptRidePopup";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import RideStatusBadge from "../RideStatusBadge";
+import { baseUrl } from "../../config/Api.js";
 
 const VehicleImageSrc = {
   car: "/LandingPage/car.webp",
@@ -22,7 +23,7 @@ const DashBoard = () => {
   const handleRefresh = async () => {
     try {
       const ridesAvailable = await axios.get(
-        "http://localhost:3000/api/v1/captain/available-rides",
+        `${baseUrl}/captain/available-rides`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setRides(ridesAvailable?.data.rideAvailable);
@@ -59,24 +60,26 @@ const DashBoard = () => {
           />
         </div>
         <div className="text-center items-center flex flex-col justify-center">
-          <p className="text-xl font-bold capitalize ">₹500</p>
+          <p className="text-xl font-bold capitalize ">₹{user?.earning}</p>
           <small className="font-extralight text-gray-500">Earned</small>
         </div>
       </div>
       <div className="flex flex-row bg-gray-200 rounded-lg mt-2 justify-around  p-2">
         <div className="flex-row text-center">
           <IoMdTime className="text-4xl block m-auto" />
-          <p className="font-bold text-lg ">10.2</p>
+          <p className="font-bold text-lg ">
+            {parseFloat(user?.timeSpent / 60).toFixed(2)}
+          </p>
           <small>Hours Spent</small>
         </div>
         <div className="flex-row  text-center">
           <IoMdSpeedometer className="text-4xl block m-auto" />
-          <p className="font-bold text-lg ">10.2</p>
+          <p className="font-bold text-lg ">{parseInt(user?.averageSpeed)}</p>
           <small>Average Speed</small>
         </div>
         <div className="flex-row text-center">
           <GiPathDistance className="text-4xl block m-auto" />
-          <p className="font-bold text-lg ">10.2</p>
+          <p className="font-bold text-lg ">{user?.distanceCovered}</p>
           <small>Distance Covered</small>
         </div>
       </div>
@@ -85,17 +88,19 @@ const DashBoard = () => {
         <div className="mt-4">
           <p className="text-xl font-bold mb-4">Available Rides</p>
           <div className="carousel overflow-x-scroll max-w-[98vw]">
-            {rides.map((ride) => {
+            {rides.map((ride, idx) => {
               return (
-                <div className="carousel-item mx-4 mb-4 mt-4 rounded-lg shadow-2xl border-2 ">
+                <div
+                  key={idx}
+                  className="carousel-item mx-4 mb-4 mt-4 rounded-lg shadow-2xl border-2 "
+                >
                   <div class="max-w-[80vw] rounded overflow-hidden  bg-white ">
                     <div class="px-6 py-4">
                       <div class="font-bold text-xl mb-2">
                         <RideStatusBadge status={ride.status} />
                       </div>
                       <p class="text-black text-lg">
-                        <span className="font-bold ">Fare </span>:{" "}
-                        ₹ {ride.fare}
+                        <span className="font-bold ">Fare </span>: ₹ {ride.fare}
                       </p>
                       <p class="text-black text-lg">
                         <span className="font-bold ">Source </span>:{" "}
@@ -105,7 +110,7 @@ const DashBoard = () => {
                         <span className="font-bold ">Destination </span>:{" "}
                         {ride.destination.split(",")[0]}
                       </p>
-                     
+
                       <p class="text-black text-lg">
                         <span className="font-bold ">Distance </span>:{" "}
                         {ride.distance} KM

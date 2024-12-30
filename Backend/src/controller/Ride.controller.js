@@ -5,6 +5,7 @@ import {
   createRide,
   RideFares,
   confirmRideByCaptainService,
+  checkOtp,
 } from "../services/Ride.service.js";
 import {
   calculateDistanceAndETA,
@@ -13,6 +14,7 @@ import {
 } from "../services/map.service.js";
 import { sendMessageToSocketId } from "../socket.js";
 import RideModel from "../model/Ride.model.js";
+import CaptainModel from "../model/Captain.model.js";
 
 const RideCreateController = async (req, res, next) => {
   try {
@@ -26,6 +28,15 @@ const RideCreateController = async (req, res, next) => {
       return res.status(404).json({ error: "One or both locations not found" });
     }
 
+    const formattedPickupCoords = [
+      originCoords.latitude,
+      originCoords.longitude,
+    ];
+
+    const formattedDestinationCoords = [
+      destinationCoords.latitude,
+      destinationCoords.longitude,
+    ];
     const distanceETA = await calculateDistanceAndETA(
       originCoords,
       destinationCoords
@@ -36,12 +47,13 @@ const RideCreateController = async (req, res, next) => {
     const newRide = await createRide({
       userId,
       pickup,
+      pickupCoords: formattedPickupCoords,
       destination,
+      destinationCoords: formattedDestinationCoords,
       vehicleType,
       distance: distanceCalculated,
       duration: timeCalculated,
     });
-
     const { latitude: destLat, longitude: destLng } = originCoords;
 
     const captainInRadius = await getCaptainsWithinRadius(
@@ -161,9 +173,73 @@ const getAllRideAvailable = async (req, res, next) => {
   }
 };
 
+const confirmRideByOtp = async (req, res, next) => {
+  try {
+    const { rideId, otp } = req.body;
+    const { userId } = req.captain;
+    let rideData = await checkOtp(rideId, otp);
+    const captain = await CaptainModel.findById(userId);
+    captain.earning += parseInt(rideData?.fare);
+    captain.distanceCovered += parseInt(rideData?.distance);
+    captain.timeSpent += parseInt(rideData?.duration);
+    captain.averageSpeed +=
+      (captain.distanceCovered + parseInt(rideData?.distance)) /
+      (captain.timeSpent + parseInt(rideData?.duration));
+    await captain.save();
+    sendMessageToSocketId(rideData.userId.socketId, {
+      event: "otp-success",
+      data: rideData,
+    });
+
+    return res.status(200).json({
+      sucess: true,
+      message: "otp verification successfully",
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    console.error("Unexpected error from ride founding:", error.message);
+    return next(new AppError("Internal server error", 500));
+  }
+};
+
+async function finishRide(req, res, next) {
+  try {
+    const { rideId } = req.body;
+    const ride = await RideModel.findById(rideId).populate("userId");
+    if (!ride) {
+      return res.status(404).json({
+        success: false,
+        message: "No ride with this id found",
+      });
+    }
+    ride.status = "completed";
+    await ride.save();
+    console.log("ride is ", ride?.userId.socketId);
+    sendMessageToSocketId(ride?.userId.socketId, {
+      event: "ride-completed",
+      data: "ride completed",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Ride completed success",
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    console.error("Unexpected error from ride founding:", error.message);
+    return next(new AppError("Internal server error", 500));
+  }
+}
+
 export {
   RideCreateController,
   AllRideFare,
   confirmRideByCaptain,
   getAllRideAvailable,
+  confirmRideByOtp,
+  finishRide,
 };
