@@ -4,11 +4,14 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { MdNavigation } from "react-icons/md";
 import { RiMapPin2Fill } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
 const Map = ({ onLocationUpdate, destinationCoords }) => {
   console.log("destination is ", destinationCoords);
+  const { userRole } = useAuth();
   const mapContainer = useRef(null);
   const map = useRef(null);
   const centerMarker = useRef(null);
@@ -38,6 +41,7 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
       );
       const json = await query.json();
       const data = json.routes[0];
+      console.log("route is", data);
       return data;
     } catch (err) {
       console.error("Error fetching route:", err);
@@ -142,13 +146,10 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
     if (!map.current || !mapLoaded) return;
 
     try {
-      // Update current location marker
       centerMarker.current.setLngLat([longitude, latitude]);
       map.current.setCenter([longitude, latitude]);
 
-      // Optionally, adjust zoom if necessary, e.g., set zoom level to 15
-      map.current.zoomTo(15); // Adjust zoom level if necessary
-      // Update route if destination exists
+      map.current.zoomTo(15);
       if (destinationCoords) {
         addRoute(
           [longitude, latitude],
@@ -167,7 +168,7 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setCurrentPosition({ latitude, longitude });
-
+          setError(null);
           if (!map.current) {
             initializeMap(longitude, latitude);
           } else {
@@ -179,21 +180,37 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
           }
         },
         (error) => {
-          console.error("Error fetching location: ", error);
-          setError(error.message);
+          let errorMessage;
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage =
+                "Please enable location services to use this feature.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = "Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              errorMessage = "Location request timed out. Please try again.";
+              break;
+            default:
+              errorMessage =
+                "An unknown error occurred while fetching location.";
+          }
+          setError(errorMessage);
         },
-        { enableHighAccuracy: true, maximumAge: 0, timeout: 10000000 }
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 }
       );
     }
 
     return () => {
       if (watchId.current !== null) {
-        navigator.geolocation.clearWatch(watchId.current);
+        navigator.geolocation.clearWatch(watchId.current); // Stop geolocation tracking
+        watchId.current = null;
       }
       if (map.current) {
         try {
-          map.current.remove(); // Safely remove map
-          map.current = null; // Ensure no reference to the removed map
+          map.current.remove(); // Safely remove the Mapbox instance
+          map.current = null; // Clear reference to the map instance
         } catch (err) {
           console.error("Error during map removal:", err);
         }
@@ -232,9 +249,11 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
         <button className="bg-white p-2 rounded-full shadow-lg">
           <RiMapPin2Fill className="w-6 h-6 text-gray-700" />
         </button>
-        <button className="bg-white p-2 rounded-full shadow-lg">
-          <FaHome className="w-6 h-6 text-gray-700" />
-        </button>
+        <Link to={`/${userRole}/home`}>
+          <button className="bg-white p-2 rounded-full shadow-lg">
+            <FaHome className="w-6 h-6 text-gray-700" />
+          </button>
+        </Link>
       </div>
     </div>
   );

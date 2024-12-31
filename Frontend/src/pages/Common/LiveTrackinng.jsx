@@ -41,11 +41,11 @@ export default function LiveTracking() {
     }
 
     // Clean up the socket listener on component unmount
-    return () => {
-      if (socket) {
-        socket.off("ride-completed");
-      }
-    };
+    // return () => {
+    //   if (socket) {
+    //     socket.off("ride-completed");
+    //   }
+    // };
   }, [socket]);
 
   const handleAccept = async () => {

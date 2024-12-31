@@ -18,7 +18,7 @@ async function createRide({
       status: { $in: ["pending", "accepted", "in-progress"] },
     });
 
-    if (isRideActive) {
+    if (!isRideActive) {
       throw new AppError(
         `User already has an active ride. Complete or cancel the ongoing ride before creating a new one.`,
         404

@@ -1,9 +1,9 @@
 import React, { createContext, useEffect } from "react";
 import { io } from "socket.io-client";
-import { baseUrl } from "../config/Api.js";
+import { socketUrl } from "../config/Api.js";
 const socketContext = createContext();
 
-const socket = io(`${baseUrl}`);
+const socket = io(`${socketUrl}`);
 const SocketProvider = ({ children }) => {
   useEffect(() => {
     socket.on("connect", () => {

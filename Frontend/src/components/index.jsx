@@ -7,7 +7,6 @@ import ChoseVehicle from "./ChoseVehicle.jsx";
 import ConfirmRide from "./ConfirmRide.jsx";
 import DriverAssigned from "./DriverAssigned.jsx";
 import FindTrip from "./FindTrip.jsx";
-import Footer from "./Footer.jsx";
 import Loader from "./Loader.jsx";
 import Toast from "./Toast.jsx";
 import TopNavbar from "./TopNavbar.jsx";
@@ -23,7 +22,6 @@ export {
   ConfirmRide,
   DriverAssigned,
   FindTrip,
-  Footer,
   Loader,
   Toast,
   TopNavbar,

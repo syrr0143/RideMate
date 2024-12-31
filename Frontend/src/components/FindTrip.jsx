@@ -23,7 +23,7 @@ const FindTrip = () => {
   const timeoutRef = useRef(null);
   const navigate = useNavigate();
   const handleFocus = (fieldName) => {
-    setHidden(true);
+    // setHidden(true);
     setActiveField(fieldName); // Set the active field when input is focused
   };
 
@@ -101,12 +101,12 @@ const FindTrip = () => {
           <p className="text-start font-bold text-2xl">Find a trip</p>
           {hidden ? (
             <IoIosArrowDropdown
-              onClick={(prev) => setHidden(!prev)}
+              // onClick={(prev) => setHidden(!prev)}
               className="text-3xl"
             />
           ) : (
             <IoIosArrowDropup
-              onClick={(prev) => setHidden(true)}
+              // onClick={(prev) => setHidden(true)}
               className="text-3xl"
             />
           )}
@@ -149,8 +149,9 @@ const FindTrip = () => {
           className="mt-2 w-[95vw] min-h-48 overflow-y-auto"
           style={{ top: "120px", zIndex: 10 }}
         >
-          {locationSuggestion.map((location, idx) =>
-            hidden ? (
+          {locationSuggestion.map(
+            (location, idx) => (
+              // !hidden ? (
               <LocationSearchResult
                 key={idx}
                 handleClick={() =>
@@ -161,7 +162,8 @@ const FindTrip = () => {
                 }
                 address={location.place_name}
               />
-            ) : null
+            )
+            // ) : null
           )}
         </div>
       </div>

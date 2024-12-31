@@ -1,99 +1,129 @@
 # RideMate Frontend
 
-Welcome to the RideMate Frontend repository. This project is the frontend component of the RideMate application, which aims to provide a seamless and user-friendly experience for ride-sharing.
+## Project Overview
 
-## Table of Contents
+RideMate is a ride-sharing application designed to connect users with drivers. The frontend of this project is built using Vite and React, providing a seamless and responsive user experience. Key features include user and driver sign-up, real-time ride tracking, and fare estimation.
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+## Tech Stack
+
+- **React**: A JavaScript library for building user interfaces.
+- **Vite**: A fast build tool and development server.
+- **TailwindCSS**: A utility-first CSS framework.
+- **Mapbox**: A mapping and location service.
+- **Socket.io**: Real-time, bidirectional communication.
 
 ## Installation
 
-To get started with the RideMate Frontend, follow these steps:
+1. **Clone the repository**:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/RideMate.git
-   ```
-2. **Navigate to the frontend directory:**
-   ```bash
+   ```sh
+   git clone https://github.com/syrr0143/RideMate
    cd RideMate/Frontend
    ```
-3. **Install dependencies:**
-   ```bash
+
+2. **Install dependencies**:
+
+   ```sh
    npm install
+   ```
+
+3. **Run the development server**:
+   ```sh
+   npm run dev
    ```
 
 ## Usage
 
-To run the application locally, use the following command:
+- **Landing Page**: The entry point of the application where users can sign up or log in.
+- **User Signup/Login**: Allows users to create an account or log in to their existing account.
+- **Driver Signup/Login**: Allows drivers to create an account or log in to their existing account.
+- **Ride Booking**: Users can book a ride by selecting a pickup and destination location.
+- **Real-time Tracking**: Users can track their ride in real-time using Mapbox integration.
 
-```bash
-npm start
-```
+## Scripts
 
-This will start the development server and you can view the application in your browser at `http://localhost:3000`.
+- **`npm run dev`**: Starts the development server.
+- **`npm run build`**: Builds the project for production.
+- **`npm run preview`**: Previews the production build locally.
+- **`npm run lint`**: Runs ESLint to check for code quality issues.
 
-## Features
-
-- User authentication and authorization
-- Real-time ride tracking
-- Interactive maps and route planning
-- Ride history and analytics
-- Notifications and alerts
-
-## Project Structure
-
-The project structure is organized as follows:
+## File Structure
 
 ```
-RideMate/Frontend
-├── public
-│   ├── index.html
-│   └── ...
-├── src
-│   ├── assets
-│   ├── components
-│   │   ├── Header.js
-│   │   ├── Footer.js
-│   │   └── ...
-│   ├── pages
-│   │   ├── Home.js
-│   │   ├── Login.js
-│   │   └── ...
-│   ├── App.js
-│   ├── index.js
-│   └── ...
+Frontend/
+├── .env
+├── .gitignore
+├── bun.lockb
+├── eslint.config.js
+├── index.html
 ├── package.json
-└── ...
+├── postcss.config.js
+├── public/
+│   └── LandingPage/
+├── README.md
+├── src/
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets/
+│   ├── components/
+│   │   ├── AuthWrapper/
+│   │   ├── BottomNavbar.jsx
+│   │   ├── BrandLogo.jsx
+│   │   ├── Button.jsx
+│   │   ├── Captain_Component/
+│   │   ├── ChoseVehicle.jsx
+│   │   ├── ConfirmRide.jsx
+│   │   ├── DriverAssigned.jsx
+│   │   ├── FindTrip.jsx
+│   │   ├── index.jsx
+│   │   ├── InputBox.jsx
+│   │   ├── Loader.jsx
+│   │   ├── LocationSearchResult.jsx
+│   ├── config/
+│   │   └── Api.js
+│   ├── context/
+│   ├── hooks/
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages/
+│   ├── utils/
+├── tailwind.config.js
+└── vite.config.js
 ```
-
-### Components
-
-- **Header.js**: Contains the navigation bar and logo.
-- **Footer.js**: Contains the footer content and links.
-- **RideCard.js**: Displays individual ride details.
-
-### Pages
-
-- **Home.js**: The landing page of the application.
-- **Login.js**: The login page for user authentication.
-- **Dashboard.js**: The user dashboard displaying ride history and analytics.
 
 ## Contributing
 
-We welcome contributions to improve RideMate Frontend. To contribute, please follow these steps:
+1. **Fork the repository**:
+   Click the "Fork" button at the top right of the repository page.
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/YourFeature`).
-3. Commit your changes (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature/YourFeature`).
-5. Open a pull request.
+2. **Clone your fork**:
 
-## License
+   ```sh
+   git clone https://github.com/syrr0143/RideMate
+   cd RideMate/Frontend
+   ```
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+3. **Create a new branch**:
+
+   ```sh
+   git checkout -b feature/your-feature-name
+   ```
+
+4. **Make your changes**:
+   Implement your feature or fix the bug.
+
+5. **Commit your changes**:
+
+   ```sh
+   git add .
+   git commit -m "Add your commit message"
+   ```
+
+6. **Push to your fork**:
+
+   ```sh
+   git push origin feature/your-feature-name
+   ```
+
+7. **Submit a pull request**:
+   Go to the original repository and click "New Pull Request".
