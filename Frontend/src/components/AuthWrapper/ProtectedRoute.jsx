@@ -16,7 +16,8 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   }
 
   if (userRole === null || !token) {
-    return <Navigate to={"/"} />;
+    navigate("https://ride-mate-five.vercel.app/", { replace: true });
+    return null; // Stop further rendering after navigating
   }
   if (token && !allowedRoles.includes(userRole)) {
     return (
@@ -34,13 +35,14 @@ const LoggedInProtectedRoute = ({ element }) => {
 
   useEffect(() => {
     // Redirect if the user is logged in (token exists)
-    if (token && userRole === "user") {
-      navigate("/user/home", { replace: true });
+    if (token) {
+      if (userRole === "user") {
+        navigate("/user/home", { replace: true });
+      } else if (userRole === "captain") {
+        navigate("/captain/home", { replace: true });
+      }
     }
-    if (token && userRole === "captain") {
-      navigate("/captain/home", { replace: true });
-    }
-  }, [token, navigate]);
+  }, [token, userRole, navigate]);
 
   // If no token (user is not logged in), show the page
   return !token ? element : null; // Prevent rendering `Navigate` directly
