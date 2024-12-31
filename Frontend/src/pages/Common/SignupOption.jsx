@@ -6,7 +6,7 @@ const SignupOption = () => {
   return (
     <>
       <div>
-        <div className="h-[65vh] bg-[url('LandingPage/bg_car2.png')] bg-contain bg-no-repeat bg-center">
+        <div className="h-[65vh] bg-[url('/LandingPage/bg_car2.png')] bg-contain bg-no-repeat bg-center">
           {" "}
           <BrandLogo style={"absolute"} />
         </div>

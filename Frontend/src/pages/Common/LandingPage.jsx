@@ -8,7 +8,7 @@ const LandingPage = () => {
       <div>
         <div
           loading="lazy"
-          className="h-[65vh] bg-[url('LandingPage/bg_car2.png')] bg-auto bg-no-repeat bg-center"
+          className="h-[65vh] bg-[url('/LandingPage/bg_car2.png')] bg-auto bg-no-repeat bg-center"
         >
           {" "}
           <BrandLogo style={"absolute"} />

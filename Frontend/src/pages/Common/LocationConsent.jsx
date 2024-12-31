@@ -20,7 +20,7 @@ const LocationConsent = () => {
 
   return (
     <div className="m-4">
-      <div className="h-[50vh] bg-no-repeat bg-center bg-[url('LandingPage/bg_car2.png')]"></div>
+      <div className="h-[50vh] bg-no-repeat bg-center bg-[url('/LandingPage/bg_car2.png')]"></div>
       <div className="text-center">
         <p className="font-bold text-xl text-center m-4">
           Welcome to Ridemate.
