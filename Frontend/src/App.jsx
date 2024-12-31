@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import {
   Home,
   UserLogin,
@@ -32,6 +32,19 @@ import DashBoard from "./components/Captain_Component/DashBoard.jsx";
 import CaptainHome from "./pages/Captain/CaptainHome.jsx";
 import ReachUserLocation from "./pages/Captain/ReachUserLocation.jsx";
 const App = () => {
+  const navigate = useNavigate();
+
+  // Add this error handler
+  React.useEffect(() => {
+    const handleError = (event) => {
+      event.preventDefault();
+      // Redirect to home page or error page on routing errors
+      navigate("/");
+    };
+
+    window.addEventListener("unhandledrejection", handleError);
+    return () => window.removeEventListener("unhandledrejection", handleError);
+  }, [navigate]);
   return (
     <div>
       <Routes>
