@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Loader, BottomNavbar } from "../../components/index.jsx";
+import { Loader, BottomNavbar, BrandLogo } from "../../components/index.jsx";
 
 import { Outlet, useLocation } from "react-router-dom";
 import { useHidden } from "../../hooks/useHidden.jsx";
@@ -59,9 +59,9 @@ const Home = () => {
   return (
     <>
       <div className="min-h-screen">
-        <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
+        <div className={` ${hidden ? "hidden" : ""} h-[75vh]`}>
           <Map onLocationUpdate={handleLocationUpdate} />
-          {/* <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} /> */}
+          <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} />
         </div>
         <div className="pb-20">
           <div className="overflow-scroll">

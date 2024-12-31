@@ -122,7 +122,7 @@ const generateNewToken = async (req, res, next) => {
 
 const logOutUser = async (req, res, next) => {
   try {
-    const { userId } = req.user;
+    const { userId, role } = req.user;
     const userFound = await findUserById(userId);
 
     if (!userFound) {
@@ -143,6 +143,7 @@ const logOutUser = async (req, res, next) => {
     if (error instanceof AppError) {
       return next(error);
     }
+    console.log("error", error);
     next(new AppError("Internal server error", 500));
   }
 };

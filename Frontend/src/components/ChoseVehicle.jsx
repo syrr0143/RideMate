@@ -5,27 +5,27 @@ import { useNavigate, useLocation } from "react-router-dom";
 const ChoseVehicle = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { fareDetails, source, destination } = location.state;
+  const { fareDetails, source, destination, eta } = location.state;
   const handleVehicleSelect = ({
     capacity,
     currentTime,
-    estimatedTravelTime,
+    estimatedTravelTime = eta,
     fare,
     vehicleType,
   }) => {
     const vehicle = {
       capacity,
       currentTime,
-      estimatedTravelTime,
+      estimatedTravelTime: estimatedTravelTime,
       fare,
       vehicleType,
       source,
-      destination
+      destination,
     };
     console.log(vehicle);
     navigate("/user/home/confirm-ride", { state: { vehicle } }); // Pass `vehicle` correctly in state
   };
-
+  console.log("estimatedTravelTime", eta);
   return (
     <div>
       <div className="mt-2 ml-2 mr-2">
@@ -34,15 +34,13 @@ const ChoseVehicle = () => {
       <div className="ml-2 mr-2">
         <VehicleDetails
           capacity={2}
-          currentTime={"15:24"}
-          estimatedTravelTime={5}
+          estimatedTravelTime={eta / 60}
           fare={fareDetails.car} // Dynamic fare for car
           vehicleType={"car"}
           onClick={() =>
             handleVehicleSelect({
               capacity: 2,
-              currentTime: "15:24",
-              estimatedTravelTime: 5,
+              estimatedTravelTime: eta,
               fare: fareDetails.car, // Use fare from API response
               vehicleType: "car",
             })
@@ -50,15 +48,13 @@ const ChoseVehicle = () => {
         />
         <VehicleDetails
           capacity={2}
-          currentTime={"15:24"}
-          estimatedTravelTime={5}
+          estimatedTravelTime={eta / 60}
           fare={fareDetails.auto} // Dynamic fare for auto
           vehicleType={"auto"}
           onClick={() =>
             handleVehicleSelect({
               capacity: 2,
-              currentTime: "15:24",
-              estimatedTravelTime: 5,
+              estimatedTravelTime: eta / 60,
               fare: fareDetails.auto, // Use fare from API response
               vehicleType: "auto",
             })
@@ -66,15 +62,13 @@ const ChoseVehicle = () => {
         />
         <VehicleDetails
           capacity={2}
-          currentTime={"15:24"}
-          estimatedTravelTime={5}
+          estimatedTravelTime={eta / 60}
           fare={fareDetails.bike} // Dynamic fare for bike
           vehicleType={"bike"}
           onClick={() =>
             handleVehicleSelect({
               capacity: 2,
-              currentTime: "15:24",
-              estimatedTravelTime: 5,
+              estimatedTravelTime: eta / 60,
               fare: fareDetails.bike, // Use fare from API response
               vehicleType: "bike",
             })

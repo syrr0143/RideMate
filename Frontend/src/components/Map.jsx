@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MdNavigation } from "react-icons/md";
@@ -9,8 +9,8 @@ import useAuth from "../hooks/useAuth";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
-const Map = ({ onLocationUpdate, destinationCoords }) => {
-  console.log("destination is ", destinationCoords);
+const Map = React.memo(({ onLocationUpdate, destinationCoords }) => {
+  console.log("re rendering the map");
   const { userRole } = useAuth();
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -228,7 +228,7 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
   };
 
   return (
-    <div className="flex-1 relative">
+    <div className="border-2 border-gray-300 rounded-b-lg flex-1 relative">
       {error && (
         <div className="absolute top-0 left-0 right-0 bg-red-500 text-white p-2 z-50">
           {error}
@@ -237,7 +237,7 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
       <div
         ref={mapContainer}
         className="w-full h-full"
-        style={{ height: "62vh" }}
+        style={{ height: "75vh" }}
       />
       <div className="absolute right-4 top-1/3 flex flex-col gap-4">
         <button
@@ -246,9 +246,7 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
         >
           <MdNavigation className="w-6 h-6 text-gray-700" />
         </button>
-        <button className="bg-white p-2 rounded-full shadow-lg">
-          <RiMapPin2Fill className="w-6 h-6 text-gray-700" />
-        </button>
+
         <Link to={`/${userRole}/home`}>
           <button className="bg-white p-2 rounded-full shadow-lg">
             <FaHome className="w-6 h-6 text-gray-700" />
@@ -257,6 +255,6 @@ const Map = ({ onLocationUpdate, destinationCoords }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Map;

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaMapPin } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
 import { Button } from "../components/index";
+import RazorpayButton from "./RazorpayButton";
 
 const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
   const VehicleImageSrc = {
@@ -16,19 +17,21 @@ const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
   //   const { state } = location;
   const state = {
     capacity: 2,
+    fullName: "sumit yadav",
     currentTime: "15:24",
     estimatedTravelTime: 5,
     fare: 193,
     vehicleType: "auto",
   };
-  const handleClick = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/user/home");
-    }, 3000);
+  const rideData = {
+    capacity: 2,
+    fullName: "sumit yadav",
+    currentTime: "15:24",
+    estimatedTravelTime: 5,
+    fare: 193,
+    vehicleType: "auto",
   };
+
   return (
     <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">
       <div className="m-2">
@@ -75,13 +78,7 @@ const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
           </p>
         </div>
       </div>
-      <Button
-        onClick={handleClick}
-        disabled={loading}
-        loading={loading}
-        name={"Make Payment"}
-        style={"bg-green-500 text-white cursor-pointer font-bold text-md"}
-      />
+      <RazorpayButton rideData={rideData} />
     </div>
   );
 };

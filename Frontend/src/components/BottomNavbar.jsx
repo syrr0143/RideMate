@@ -1,111 +1,88 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import useAuth from "../hooks/useAuth.jsx";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  AiOutlineHome,
+  AiOutlineCreditCard,
+  AiOutlineTransaction,
+  AiOutlineFileText,
+  AiOutlineUser,
+} from "react-icons/ai";
+import useAuth from "../hooks/useAuth";
 
-const BottomNavbar = ({ style }) => {
-  const { userRole } = useAuth();
+export default function BottomNav() {
+  const [active, setActive] = useState("home");
+  const { user } = useAuth();
+
   return (
-    <div className={`${style} fixed bottom-0 h-16   w-full bg-base-200`}>
-      <ul className="flex justify-around menu menu-horizontal bg-base-200 rounded-box p-0">
-        <li>
-          <Link
-            to={`/${userRole}/home`}
-            className="flex justify-center pt-2 pb-0"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            <p htmlFor="home" className="p-2 font-semibold">
-              Home
-            </p>
-          </Link>
-        </li>
-        <li>
-          <Link
-            to={`/${userRole}/service`}
-            className="flex justify-center pt-2 pb-0"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 "
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <p htmlFor="home" className="font-semibold p-2">
-              Services
-            </p>
-          </Link>
-        </li>
-        <li>
-          <Link
-            to={`/${userRole}/home`}
-            className="flex justify-center pt-2 pb-0"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
-            <p htmlFor="home" className="font-semibold p-2">
-              Activity
-            </p>
-          </Link>
-        </li>
-        <li>
-          <Link
-            to={`/${userRole}/home`}
-            className="flex justify-center pt-2 pb-0"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"
-              />
-            </svg>
-            <p htmlFor="home" className="font-semibold p-2">
-              Account
-            </p>
-          </Link>
-        </li>
-      </ul>
+    <div className="btm-nav bg-white border-t shadow-2xl border-gray-100 pb-safe fixed bottom-0 left-0 right-0">
+      <NavLink
+        to="/"
+        onClick={() => setActive("home")}
+        className={({ isActive }) =>
+          `flex flex-col items-center ${
+            isActive || active === "home" ? "text-black" : "text-gray-500"
+          }`
+        }
+      >
+        <AiOutlineHome className="w-6 h-6" />
+        <span className="btm-nav-label text-xs font-medium mt-1">Home</span>
+      </NavLink>
+
+      <NavLink
+        to="/"
+        onClick={() => setActive("cards")}
+        className={({ isActive }) =>
+          `flex flex-col items-center ${
+            isActive || active === "cards" ? "text-black" : "text-gray-500"
+          }`
+        }
+      >
+        <AiOutlineCreditCard className="w-6 h-6" />
+        <span className="btm-nav-label text-xs font-medium mt-1">Cards</span>
+      </NavLink>
+
+      <NavLink
+        to="/"
+        onClick={() => setActive("transactions")}
+        className={({ isActive }) =>
+          `flex flex-col items-center ${
+            isActive || active === "transactions"
+              ? "text-black"
+              : "text-gray-500"
+          }`
+        }
+      >
+        <AiOutlineTransaction className="w-6 h-6" />
+        <span className="btm-nav-label text-xs font-medium mt-1">
+          Transactions
+        </span>
+      </NavLink>
+
+      <NavLink
+        to="/"
+        onClick={() => setActive("requests")}
+        className={({ isActive }) =>
+          `flex flex-col items-center ${
+            isActive || active === "requests" ? "text-black" : "text-gray-500"
+          }`
+        }
+      >
+        <AiOutlineFileText className="w-6 h-6" />
+        <span className="btm-nav-label text-xs font-medium mt-1">Requests</span>
+      </NavLink>
+
+      <NavLink
+        to={`/${user?.role}/profile`}
+        onClick={() => setActive("profile")}
+        className={({ isActive }) =>
+          `flex flex-col items-center ${
+            isActive || active === "profile" ? "text-black" : "text-gray-500"
+          }`
+        }
+      >
+        <AiOutlineUser className="w-6 h-6" />
+        <span className="btm-nav-label text-xs font-medium mt-1">Profile</span>
+      </NavLink>
     </div>
   );
-};
-
-export default BottomNavbar;
+}

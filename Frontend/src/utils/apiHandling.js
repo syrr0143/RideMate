@@ -40,6 +40,16 @@ const getCaptainProfile = async (token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const logoutUser = async (token) => {
+  return axios.post(`${baseUrl}/user/logout`, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const logoutCaptain = async (token) => {
+  return axios.post(`${baseUrl}/captain/logout`, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 const getUserProfile = async (token) => {
   return axios.get(`${baseUrl}/user/profile`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -54,4 +64,6 @@ export {
   getCaptainProfile,
   getUserProfile,
   generateNewTokenForUser,
+  logoutUser,
+  logoutCaptain,
 };

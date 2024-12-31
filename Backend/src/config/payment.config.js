@@ -1,0 +1,4 @@
+const RAZORPAY_KEY = process.env.RAZORPAY_KEY;
+const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET;
+
+export { RAZORPAY_KEY, RAZORPAY_SECRET };

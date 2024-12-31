@@ -71,13 +71,15 @@ const CaptainLogin = () => {
             <small className="text-red-500">{errors.password}</small>
           )}
           {apiError && <small className="text-red-500">{apiError}</small>}
-          <Button
-            name={"Login"}
-            disabled={loading}
-            type={"submit"}
-            loading={loading}
-            style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
-          />
+          <div className="flex justify-center">
+            <Button
+              name={"Login"}
+              disabled={loading}
+              type={"submit"}
+              loading={loading}
+              style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
+            />
+          </div>
         </form>
         <small className="flex justify-center">
           Don't have an account?{" "}

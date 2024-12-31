@@ -54,13 +54,15 @@ const DashBoard = () => {
         </div>
         <div>
           <img
-            className="w-24 h-24 rounded-full"
+            className="w-20 h-20 rounded-full"
             src={VehicleImageSrc[user?.vehicle.vehicleType]}
             alt=""
           />
         </div>
         <div className="text-center items-center flex flex-col justify-center">
-          <p className="text-xl font-bold capitalize ">₹{user?.earning}</p>
+          <p className="text-xl font-bold capitalize ">
+            ₹{(user?.earning / 1000).toFixed(1)} K
+          </p>
           <small className="font-extralight text-gray-500">Earned</small>
         </div>
       </div>
@@ -68,7 +70,7 @@ const DashBoard = () => {
         <div className="flex-row text-center">
           <IoMdTime className="text-4xl block m-auto" />
           <p className="font-bold text-lg ">
-            {parseFloat(user?.timeSpent / 60).toFixed(2)}
+            {parseFloat(user?.timeSpent / 60 / 1000).toFixed(1)} k
           </p>
           <small>Hours Spent</small>
         </div>
@@ -79,7 +81,9 @@ const DashBoard = () => {
         </div>
         <div className="flex-row text-center">
           <GiPathDistance className="text-4xl block m-auto" />
-          <p className="font-bold text-lg ">{user?.distanceCovered}</p>
+          <p className="font-bold text-lg ">
+            {(user?.distanceCovered / 1000).toFixed(1)} k
+          </p>
           <small>Distance Covered</small>
         </div>
       </div>

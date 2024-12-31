@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import InputBox from "../components/InputBox.jsx";
 import { FaMapPin, FaMapMarkerAlt } from "react-icons/fa";
-import { IoIosArrowDropup, IoIosArrowDropdown } from "react-icons/io";
 import { LocationSearchResult } from "../components/index.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useHidden } from "../hooks/useHidden.jsx";
@@ -83,9 +82,10 @@ const FindTrip = () => {
           },
         }
       );
+      console.log("fare response is ", response);
       const fareDetails = response.data.fares;
-      navigate("/user/home/chose-vehicle", {
-        state: { ...tripData, fareDetails },
+      navigate("chose-vehicle", {
+        state: { ...tripData, fareDetails, eta: response?.data.eta },
       });
     } catch (error) {
       console.error("Error fetching fare details:", error);
@@ -99,17 +99,6 @@ const FindTrip = () => {
       <div className="ml-2 me-2 mt-2">
         <div className="flex flex-row justify-between">
           <p className="text-start font-bold text-2xl">Find a trip</p>
-          {hidden ? (
-            <IoIosArrowDropdown
-              // onClick={(prev) => setHidden(!prev)}
-              className="text-3xl"
-            />
-          ) : (
-            <IoIosArrowDropup
-              // onClick={(prev) => setHidden(true)}
-              className="text-3xl"
-            />
-          )}
         </div>
         <form className="w-full flex flex-col items-center space-y-4">
           <div className="relative w-full">
@@ -118,7 +107,7 @@ const FindTrip = () => {
               name={"source"}
               value={tripData.source}
               onFocus={() => handleFocus("source")}
-              inputStyle="w-[95vw] pr-8"
+              inputStyle="w-full "
               type="text"
               placeholder="Enter your source"
             />

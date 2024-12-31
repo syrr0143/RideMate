@@ -1,12 +1,12 @@
-
 import React from "react";
 import { FaUser } from "react-icons/fa";
+import { getCurrentTime24Hour } from "../utils/time.js";
 
 const VehicleDetails = ({
   vehicleType,
   fare,
   capacity,
-  currentTime,
+  currentTime = getCurrentTime24Hour(),
   estimatedTravelTime,
   otherDetails,
   onClick,
@@ -16,11 +16,11 @@ const VehicleDetails = ({
     auto: "/LandingPage/auto.jpeg",
     bike: "/LandingPage/bike.jpeg",
   };
-
+  console.log("estimatedTravelTime", estimatedTravelTime);
   return (
     <div
       onClick={onClick}
-      className="flex mt-2 active:border-black cursor-pointer border-gray-200 border-2 rounded-xl p-4 shadow-"
+      className="flex mt-2 active:border-black shadow-xl cursor-pointer border-gray-200 border-2 rounded-xl p-4 shadow-"
     >
       <div className="w-2/6">
         <img
@@ -37,7 +37,7 @@ const VehicleDetails = ({
           <span className="text-xl font-bold">{capacity}</span>
         </div>
         <p className="font-semibold text-sm">
-          {estimatedTravelTime} mins away <span>{currentTime}</span>
+          {parseInt(estimatedTravelTime)} mins away <span>{currentTime}</span>
         </p>
         <p className="text-gray-500 text-sm font-semibold">
           Affordable, compact ride

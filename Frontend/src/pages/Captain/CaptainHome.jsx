@@ -78,7 +78,7 @@ const Home = () => {
   return (
     <>
       <div className="min-h-screen">
-        <div className={` ${hidden ? "hidden" : ""} h-[62vh]`}>
+        <div className={` ${hidden ? "hidden" : ""} h-[75vh]`}>
           {/* <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} /> */}
           {/* map */}
           <Map onLocationUpdate={handleLocationUpdate} />

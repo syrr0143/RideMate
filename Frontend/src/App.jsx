@@ -26,8 +26,13 @@ import {
 } from "./components/index.jsx";
 
 import LiveTracking from "./pages/Common/LiveTrackinng.jsx";
+import HelpAndSupport from "./pages/Common/HelpAndSupport.jsx";
+import NotFoundPage from "./components/NotFound.jsx";
+import ProfilePage from "./pages/Common/ProfilePage.jsx";
+import AboutPage from "./pages/Common/AboutPage.jsx";
 
 import DashBoard from "./components/Captain_Component/DashBoard.jsx";
+import UpdateDetails from "./components/UpdateDetails.jsx";
 
 import CaptainHome from "./pages/Captain/CaptainHome.jsx";
 import ReachUserLocation from "./pages/Captain/ReachUserLocation.jsx";
@@ -83,17 +88,27 @@ const App = () => {
             <Route path="make-payment" element={<MakePayment />} />
           </Route>
           <Route path="/user/live-track" element={<LiveTracking />} />
+          <Route path="/user/profile" element={<ProfilePage />} />
+          <Route path="/user/account" element={<UpdateDetails />} />
+          <Route path="/user/help" element={<HelpAndSupport />} />
+          <Route path="/user/about" element={<AboutPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={["captain"]} />}>
           <Route path="/captain/home" element={<CaptainHome />}>
             <Route index element={<DashBoard />} />
           </Route>
           <Route path="/captain/live-track" element={<LiveTracking />} />
+          <Route path="/captain/profile" element={<ProfilePage />} />
+          <Route path="/captain/account" element={<UpdateDetails />} />
+          <Route path="/captain/help" element={<HelpAndSupport />} />
+          <Route path="/captain/about" element={<AboutPage />} />
+
           <Route
             path="/captain/reach-user-location"
             element={<ReachUserLocation />}
           />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

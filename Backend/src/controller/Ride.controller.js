@@ -113,6 +113,7 @@ const AllRideFare = async (req, res, next) => {
     return res.status(201).json({
       sucess: true,
       fares: fares,
+      eta: timeCalculated,
       message: "fares fetched successfully",
     });
   } catch (error) {

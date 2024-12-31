@@ -80,7 +80,7 @@ const ConfirmRide = () => {
           : "Confirm Your Ride"}
       </p>
 
-      <div className="border-b-2 mb-2 flex justify-center">
+      <div className="border-b-2 mb-2 flex justify-center ">
         <img
           src={VehicleImageSrc[vehicle.vehicleType]} // Displaying vehicle image
           className="h-32 rounded-full"
@@ -129,7 +129,9 @@ const ConfirmRide = () => {
         disabled={loading}
         loading={loading || waitingForDriver}
         name={"Confirm Ride"}
-        style={"bg-green-500 text-white cursor-pointer font-bold text-md"}
+        style={
+          "shadow-2xl bg-green-500 text-white cursor-pointer font-bold text-md"
+        }
       />
     </div>
   );

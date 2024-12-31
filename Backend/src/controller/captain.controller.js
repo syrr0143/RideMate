@@ -149,7 +149,4 @@ const logOutCaptain = async (req, res, next) => {
   }
 };
 
-
-
-
 export { signUpCaptain, loginCaptain, captainProfile, logOutCaptain };

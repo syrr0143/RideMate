@@ -76,13 +76,15 @@ const UserLogin = () => {
             <small className="text-red-500">{errors.password}</small>
           )}
           {apiError && <small className="text-red-500">{apiError}</small>}
-          <Button
-            type={"submit"}
-            disabled={loading}
-            name={"Login"}
-            loading={loading}
-            style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
-          />
+          <div className="flex justify-center">
+            <Button
+              type={"submit"}
+              disabled={loading}
+              name={"Login"}
+              loading={loading}
+              style={" bg-black w-full max-w-xs mt-4 mb-4 w- text-white"}
+            />
+          </div>
         </form>
         <small className="flex justify-center">
           Don't have an account?{" "}
