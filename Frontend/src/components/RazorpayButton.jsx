@@ -30,7 +30,7 @@ const RazorpayButton = ({ rideData }) => {
       }
 
       const options = {
-        key: "rzp_test_ce43FyxOdnFxJD", // Replace with your Razorpay Key ID
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Replace with your Razorpay Key ID
         amount: data.amount, // Amount in paise (100 = ₹1)
         currency: "INR", // Currency code
         order_id: data.orderId, // Order ID received from backend

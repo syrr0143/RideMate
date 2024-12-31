@@ -7,8 +7,8 @@ import { RAZORPAY_KEY, RAZORPAY_SECRET } from "../config/payment.config.js";
 
 console.log(RAZORPAY_SECRET, RAZORPAY_KEY);
 const razorpay = new Razorpay({
-  key_id: "rzp_test_ce43FyxOdnFxJD", // Replace with your Razorpay Key ID
-  key_secret: "nyhhE3qAzlM1pqzHaEvOR6HN", // Replace with your Razorpay Key Secret
+  key_id: RAZORPAY_KEY, // Replace with your Razorpay Key ID
+  key_secret: RAZORPAY_SECRET, // Replace with your Razorpay Key Secret
 });
 
 // Controller to create an order
