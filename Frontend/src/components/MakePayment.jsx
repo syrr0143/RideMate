@@ -33,51 +33,55 @@ const MakePayment = ({ userCurrentLocation, userDestinationLocation }) => {
   };
 
   return (
-    <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">
+    <div className="flex flex-col mt-2 gap-4 border-2 shadow-xl border-gray-200 cursor-pointer rounded-xl max-w-lg mx-auto  p-4 bg-white ">
       <div className="m-2">
         <div>
-          <div className="flex justify-between">
+          {/* Vehicle Info */}
+          <div className="flex justify-between items-center">
             <div className="avatar">
-              <div className="w-20 h-20 rounded-full">
-                <img src={VehicleImageSrc["car"]} alt="" />
+              <div className="h-48 rounded-full">
+                <img src={VehicleImageSrc["car"]} alt="Vehicle Image" />
               </div>
             </div>
             <div>
-              <p className="text-md font-semibold text-gray-400 capitalize">
-                sumit yadav
+              <p className="text-md font-semibold text-gray-600 capitalize">
+                Sumit Yadav
               </p>
-              <p className="text-md font-bold text-xl uppercase">ka15ak00-0</p>
+              <p className="text-md font-bold text-xl uppercase">KA15AK00-0</p>
               <p className="text-md font-semibold capitalize text-gray-400">
-                white scorpio s-presso lxi
+                White Scorpio S-Presso LXi
               </p>
             </div>
           </div>
-          <div className="items-center flex gap-4  border-t-2  p-2">
+
+          {/* Destination Info */}
+          <div className="flex items-center gap-4 border-t-2 pt-2 mt-2">
             <FaMapPin />
             <div>
               <p className="font-bold text-md inline mr-4 capitalize">
-                {" "}
-                Third wave coffee{" "}
+                Third Wave Coffee
               </p>
-              <p className="font-medium text-sm text-gray-400 block  capitalize">
-                {" "}
-                17th cross road, pwd quarter, 1st sector, HSR layout, bengaluru
-                , karaatak{" "}
+              <p className="font-medium text-sm text-gray-400 block capitalize">
+                17th Cross Road, PWD Quarter, 1st Sector, HSR Layout, Bengaluru,
+                Karnataka
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-4  border-b-2 rounded-lg p-2">
+
+      {/* Payment Info */}
+      <div className="flex items-center gap-4 border-b-2 pb-2 mb-2 rounded-lg">
         <MdPayment />
         <div>
-          <p className="font-bold text-md inline mr-4"> ₹{state.fare} </p>
-          <p className="font-medium text-sm text-gray-400 block  capitalize">
-            {" "}
-            G-pay{" "}
+          <p className="font-bold text-md inline mr-4">₹{state.fare}</p>
+          <p className="font-medium text-sm text-gray-400 block capitalize">
+            G-Pay
           </p>
         </div>
       </div>
+
+      {/* Razorpay Button */}
       <RazorpayButton rideData={rideData} />
     </div>
   );

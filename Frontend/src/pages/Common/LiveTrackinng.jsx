@@ -36,7 +36,7 @@ export default function LiveTracking() {
     if (socket) {
       socket.on("ride-completed", (message) => {
         console.log(message);
-        navigate("/user/home");
+        navigate("/user/home/make-payment");
       });
     }
 
@@ -68,7 +68,7 @@ export default function LiveTracking() {
   };
 
   return (
-    <div className="h-screen w-full max-w-md mx-auto bg-black text-white flex flex-col relative">
+    <div className="h-screen w-full  mx-auto bg-black text-white flex flex-col relative">
       {/* Top Navigation Bar */}
       <div className="flex items-center px-4 py-3 backdrop-blur-sm z-10">
         <button className="p-2">
@@ -76,7 +76,7 @@ export default function LiveTracking() {
         </button>
         <div className="ml-2">
           <h1 className="text-lg font-medium">Gracechurch Street</h1>
-          <p className="text-md text-gray-300 ">40 m</p>
+          <p className="text-md text-gray-300">40 m</p>
         </div>
       </div>
 
@@ -93,6 +93,7 @@ export default function LiveTracking() {
           <span className="text-lg font-bold">4 KM AWAY</span>
         </div>
 
+        {/* Conditional Button Rendering */}
         {userRole !== "user" &&
           (loading ? (
             <Loader />
@@ -105,9 +106,8 @@ export default function LiveTracking() {
           ))}
       </div>
 
-      {userRole === "user" ? (
-        ""
-      ) : (
+      {/* Modal (Only for non-user roles) */}
+      {userRole !== "user" && (
         <Modal
           OnAccept={handleAccept}
           closeModal={handleNotCompleted}

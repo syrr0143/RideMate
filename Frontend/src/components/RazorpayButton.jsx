@@ -85,7 +85,7 @@ const RazorpayButton = ({ rideData }) => {
 
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
-      navigate("/", { replace: true });
+      navigate("/user/home", { replace: true });
     } catch (error) {
       console.error("Error creating order:", error);
       alert("Error creating order.");

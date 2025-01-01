@@ -64,7 +64,7 @@ const Home = () => {
           <BrandLogo style={"absolute top-0 left-0 m-0 ml-2"} />
         </div>
         <div className="pb-20">
-          <div className="overflow-scroll">
+          <div className="overflow-hidden">
             <Outlet />
           </div>
         </div>

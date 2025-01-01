@@ -73,17 +73,17 @@ const ConfirmRide = () => {
   }, [socket, otp, navigate]);
 
   return (
-    <div className="flex flex-col mt-2 gap-4 cursor-pointer rounded-xl p-4">
+    <div className="flex flex-col mt-2 gap-4 border-2 shadow-2xl  hover:transition-all border-gray-200 cursor-pointer rounded-xl p-4 max-w-lg mx-auto mb-4">
       <p className="text-xl font-bold mb-2 text-center">
         {waitingForDriver
           ? "Looking For Nearby Driver..."
           : "Confirm Your Ride"}
       </p>
 
-      <div className="border-b-2 mb-2 flex justify-center ">
+      <div className="border-b-2 mb-2 flex justify-center">
         <img
           src={VehicleImageSrc[vehicle.vehicleType]} // Displaying vehicle image
-          className="h-32 rounded-full"
+          className="h-48 "
           alt={vehicle.vehicleType}
         />
       </div>
@@ -92,8 +92,7 @@ const ConfirmRide = () => {
         <FaMapMarkerAlt />
         <div>
           <p className="font-bold text-md inline mr-4 capitalize">
-            {" "}
-            {vehicle.source.split(",")[0]}{" "}
+            {vehicle.source.split(",")[0]}
           </p>
           <p className="font-medium text-sm text-gray-400 block capitalize">
             {vehicle.source}
@@ -101,7 +100,7 @@ const ConfirmRide = () => {
         </div>
       </div>
 
-      <div className="items-center flex gap-4  border-b-2 rounded-lg p-2">
+      <div className="items-center flex gap-4 border-b-2 rounded-lg p-2">
         <FaMapPin />
         <div>
           <p className="font-bold text-md inline mr-4 capitalize">
@@ -116,7 +115,7 @@ const ConfirmRide = () => {
       <div className="flex items-center gap-4 border-b-2 rounded-lg p-2">
         <MdPayment />
         <div>
-          <p className="font-bold text-md inline mr-4"> {formattedFare} </p>{" "}
+          <p className="font-bold text-md inline mr-4">{formattedFare}</p>{" "}
           {/* Access fare from vehicle */}
           <p className="font-medium text-sm text-gray-400 block capitalize">
             G-Pay
@@ -124,15 +123,17 @@ const ConfirmRide = () => {
         </div>
       </div>
 
-      <Button
-        onClick={handleClick}
-        disabled={loading}
-        loading={loading || waitingForDriver}
-        name={"Confirm Ride"}
-        style={
-          "shadow-2xl bg-green-500 text-white cursor-pointer font-bold text-md"
-        }
-      />
+      <div className="flex  justify-center">
+        <Button
+          onClick={handleClick}
+          disabled={loading}
+          loading={loading || waitingForDriver}
+          name={"Confirm Ride"}
+          style={
+            "shadow-lg hover:shadow-2xl hover:bg-green-600 hover:transition-shadow duration-300  w-[50%] bg-green-500 text-white cursor-pointer font-bold text-md w-full"
+          }
+        />
+      </div>
     </div>
   );
 };

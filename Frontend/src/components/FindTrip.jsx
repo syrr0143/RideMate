@@ -95,12 +95,12 @@ const FindTrip = () => {
   };
 
   return (
-    <>
-      <div className="ml-2 me-2 mt-2">
-        <div className="flex flex-row justify-between">
+    <div className="flex justify-center">
+      <div className="ml-2 me-2 mt-2 flex flex-col  mx-auto lg:w-[50vw]">
+        <div>
           <p className="text-start font-bold text-2xl">Find a trip</p>
         </div>
-        <form className="w-full flex flex-col items-center space-y-4">
+        <form className="w-full space-y-4">
           <div className="relative w-full">
             <InputBox
               onChange={handleTripDetailChange}
@@ -124,14 +124,16 @@ const FindTrip = () => {
             />
             <FaMapPin className="absolute right-4 top-24" />
           </div>
-          <Button
-            disabled={!tripData.source || !tripData.destination}
-            name={"Find trip"}
-            onClick={handleFindTrip}
-            style={"bg-black text-white w-full"}
-            type={"submit"}
-            loading={loading}
-          />
+          <div className="flex justify-center">
+            <Button
+              disabled={!tripData.source || !tripData.destination}
+              name={"Find trip"}
+              onClick={handleFindTrip}
+              style={"bg-black text-white "}
+              type={"submit"}
+              loading={loading}
+            />
+          </div>
           {/* Second Input Box */}
         </form>
         <div
@@ -156,7 +158,7 @@ const FindTrip = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

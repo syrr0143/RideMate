@@ -27,11 +27,10 @@ const ChoseVehicle = () => {
   };
   console.log("estimatedTravelTime", eta);
   return (
-    <div>
-      <div className="mt-2 ml-2 mr-2">
-        <p className="font-bold text-2xl mb-4">Choose a vehicle</p>
-      </div>
-      <div className="ml-2 mr-2">
+    <div className="mt-2 ml-2 mr-2">
+      <p className="font-bold text-2xl mb-4">Choose a vehicle</p>
+
+      <div className="ml-2 mr-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <VehicleDetails
           capacity={2}
           estimatedTravelTime={eta / 60}
