@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Captain API
+  version: 1.0.0
+  description: API documentation for captain-related operations. This API allows captains to sign up, log in, view and update their profiles, confirm rides, and more.
+
+tags:
+  - name: Captains
+    description: Operations related to captains.
+
+paths:
+  /captain/signup:
+    post:
+      summary: Captain Signup
+      description: |
+        This endpoint allows a new captain to register by providing their personal details, email, password, and vehicle information. 
+        Upon successful registration, the captain will be able to access and use the platform for ride assignments.
+      tags:
+        - Captains
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  description: The full name of the captain.
+                email:
+                  type: string
+                  description: The captain's email address, which will be used for login.
+                password:
+                  type: string
+                  description: The captain's chosen password for account security.
+                vehicle:
+                  type: object
+                  description: Vehicle details associated with the captain.
+                  properties:
+                    color:
+                      type: string
+                      description: The color of the vehicle.
+                    numberPlate:
+                      type: string
+                      description: The vehicle's registration number.
+                    capacity:
+                      type: integer
+                      description: The seating capacity of the vehicle.
+                    vehicleType:
+                      type: string
+                      description: Type of the vehicle (e.g., sedan, SUV, etc.).
+      responses:
+        201:
+          description: Captain created successfully.
+        400:
+          description: Validation error.
+
+  /captain/login:
+    post:
+      summary: Captain Login
+      description: |
+        This endpoint allows captains to log in by providing their email and password. 
+        Successful login returns a token that must be used for authenticated requests.
+      tags:
+        - Captains
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The captain's email address.
+                password:
+                  type: string
+                  description: The captain's password.
+      responses:
+        200:
+          description: Login successful. A token is returned.
+        401:
+          description: Invalid credentials.
+
+  /captain/profile:
+    get:
+      summary: Get Captain Profile
+      description: |
+        This endpoint retrieves the profile of the currently authenticated captain, including personal and vehicle information.
+        The captain must include their authentication token in the request header.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Profile retrieved successfully.
+        401:
+          description: Unauthorized. The request is missing or has an invalid authentication token.
+
+  /captain/logout:
+    post:
+      summary: Captain Logout
+      description: |
+        This endpoint logs the captain out by invalidating their current authentication token. After logout, the captain will no longer be able to make authenticated requests.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Logout successful. The token is invalidated.
+        401:
+          description: Unauthorized. No valid authentication token found.
+
+  /captain/confirm-ride:
+    post:
+      summary: Confirm Ride by Captain
+      description: |
+        This endpoint allows a captain to confirm their acceptance of a ride by providing the ride ID. Once confirmed, the ride is considered assigned to the captain.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rideId:
+                  type: string
+                  description: The unique identifier of the ride to be confirmed.
+      responses:
+        200:
+          description: Ride confirmed successfully.
+        404:
+          description: Ride not found. The provided ride ID does not exist.
+
+  /captain/available-rides:
+    get:
+      summary: Get All Available Rides
+      description: |
+        This endpoint retrieves a list of all available rides for the captain to accept. The captain can choose which rides they wish to confirm.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: List of available rides retrieved successfully.
+        401:
+          description: Unauthorized. The request is missing or has an invalid authentication token.
+
+  /captain/confirm-otp:
+    post:
+      summary: Confirm Ride by OTP
+      description: |
+        This endpoint allows a captain to confirm a ride by providing the OTP sent to them for that ride. Once the OTP is validated, the ride is marked as started.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rideId:
+                  type: string
+                  description: The unique identifier of the ride to be confirmed.
+                otp:
+                  type: string
+                  description: The OTP sent to the captain for confirming the ride.
+      responses:
+        200:
+          description: OTP confirmed successfully, ride started.
+        400:
+          description: Invalid OTP. The OTP provided is incorrect.
+
+  /captain/finish-ride:
+    post:
+      summary: Finish Ride
+      description: |
+        This endpoint allows the captain to mark a ride as finished. Once marked finished, the ride status is updated, and the captain's earnings or ride details are updated accordingly.
+      tags:
+        - Captains
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rideId:
+                  type: string
+                  description: The unique identifier of the ride to be finished.
+      responses:
+        200:
+          description: Ride finished successfully.
+        404:
+          description: Ride not found. The provided ride ID does not exist.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

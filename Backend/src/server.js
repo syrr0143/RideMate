@@ -3,7 +3,6 @@ import app from "./app.js";
 
 import connectDb from "./config/db.config.js";
 import { initializeSocket } from "./socket.js";
-
 connectDb();
 
 const port = process.env.PORT || 3000;

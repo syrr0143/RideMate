@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: Ridemate API
+  version: 1.0.0
+  description: API for user management, ride management, and payment operations.
+
+tags:
+  - name: Users
+    description: User management and authentication operations.
+  - name: Rides
+    description: Operations related to creating and managing rides.
+  - name: Maps
+    description: Operations related to location, distance, and ETA calculations.
+  - name: Payments
+    description: Operations related to creating and processing payments.
+
+paths:
+  /user/signup:
+    post:
+      summary: User Signup
+      description: Allows new users to sign up by providing their full name, email, and password.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  description: Full name of the user.
+                email:
+                  type: string
+                  description: Email address of the user.
+                password:
+                  type: string
+                  description: User's password.
+      responses:
+        201:
+          description: User created successfully.
+        400:
+          description: Bad request, invalid input.
+
+  /user/login:
+    post:
+      summary: User Login
+      description: Allows users to log in with their email and password to receive an authentication token.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email address of the user.
+                password:
+                  type: string
+                  description: User's password.
+      responses:
+        200:
+          description: Login successful, returns a token for authenticated requests.
+        401:
+          description: Unauthorized, invalid credentials.
+
+  /user/profile:
+    get:
+      summary: Get User Profile
+      description: Retrieves the user's profile, including their personal information.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User profile retrieved successfully.
+        401:
+          description: Unauthorized, no valid token provided.
+
+  /user/logout:
+    post:
+      summary: User Logout
+      description: Logs the user out by invalidating the authentication token.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Logout successful.
+        401:
+          description: Unauthorized, no valid token provided.
+
+  /user/get-token:
+    post:
+      summary: Generate New Token
+      description: Generates a new authentication token for the user.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Token generated successfully, returns a new token.
+        401:
+          description: Unauthorized, no valid token provided.
+
+  /user/create-ride:
+    post:
+      summary: Create a Ride
+      description: Allows a user to create a new ride by specifying pickup location, destination, and vehicle type.
+      tags:
+        - Rides
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pickup:
+                  type: string
+                  description: Pickup location of the ride.
+                destination:
+                  type: string
+                  description: Destination location of the ride.
+                vehicleType:
+                  type: string
+                  description: Type of vehicle (e.g., car, bike).
+      responses:
+        201:
+          description: Ride created successfully.
+        400:
+          description: Bad request, invalid ride details.
+
+  /user/fare-details:
+    post:
+      summary: Get Fare Details
+      description: Retrieves the fare details for a ride based on the user's specified locations and vehicle type.
+      tags:
+        - Rides
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Fare details retrieved successfully.
+        400:
+          description: Bad request, missing or invalid input.
+
+  /user/get-coordinates:
+    post:
+      summary: Get Coordinates
+      description: Retrieves the coordinates (latitude and longitude) of a specified address.
+      tags:
+        - Maps
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: Address for which coordinates are requested.
+      responses:
+        200:
+          description: Coordinates retrieved successfully.
+        400:
+          description: Invalid address provided.
+
+  /user/distance-eta:
+    post:
+      summary: Get Distance and ETA
+      description: Calculates the distance and estimated time of arrival (ETA) between two locations.
+      tags:
+        - Maps
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origin:
+                  type: string
+                  description: Starting location.
+                destination:
+                  type: string
+                  description: Ending location.
+      responses:
+        200:
+          description: Distance and ETA calculated successfully.
+        400:
+          description: Invalid locations provided.
+
+  /user/location-suggestion:
+    post:
+      summary: Get Location Suggestions
+      description: Suggests location options based on a user's query.
+      tags:
+        - Maps
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: A search query to get location suggestions.
+      responses:
+        200:
+          description: Location suggestions retrieved successfully.
+        400:
+          description: Invalid query.
+
+  /user/create-order:
+    post:
+      summary: Create a Payment Order
+      description: Creates a payment order for a ride, including the amount and currency.
+      tags:
+        - Payments
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: The total amount for the payment.
+                currency:
+                  type: string
+                  description: The currency of the payment (e.g., USD, INR).
+      responses:
+        201:
+          description: Payment order created successfully.
+        400:
+          description: Invalid payment details.
+
+  /user/payment-callback:
+    post:
+      summary: Payment Callback
+      description: Handles the callback from a payment gateway after payment processing.
+      tags:
+        - Payments
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Payment processed successfully.
+        400:
+          description: Payment processing error.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
