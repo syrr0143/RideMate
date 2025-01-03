@@ -27,9 +27,7 @@ const DashBoard = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setRides(ridesAvailable?.data.rideAvailable);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     // window.location.reload();
   };
 

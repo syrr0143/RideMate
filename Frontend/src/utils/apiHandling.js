@@ -2,7 +2,6 @@ import axios from "axios";
 import { baseUrl } from "../config/Api.js";
 
 const userSignUp = async (userInput) => {
-  console.log("baseurl is ", baseUrl);
   return axios.post(`${baseUrl}/user/signup`, userInput);
 };
 

@@ -49,13 +49,9 @@ const Home = () => {
   }, [user, socket]);
 
   useEffect(() => {
-    console.log("Socket instance:", socket);
-    socket.on("connect", () => {
-      console.log("Socket connected with ID:", socket.id);
-    });
+    socket.on("connect", () => {});
 
     socket.on("new-ride", (data) => {
-      console.log("New ride received:", data);
       setNewRideData(data);
     });
 
@@ -72,7 +68,6 @@ const Home = () => {
   }
   const handleLocationUpdate = ({ latitude, longitude }) => {
     // Handle location updates if needed
-    console.log("Current position:", latitude, longitude);
   };
 
   return (

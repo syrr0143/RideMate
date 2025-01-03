@@ -21,14 +21,12 @@ const AcceptRidePopup = ({ rideData, onClose }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("response after ride aaccept is ", response);
+
       setisNewRideModalOpen(false);
       navigate("/captain/reach-user-location", {
         state: { rideData },
       });
-    } catch (error) {
-      console.log("error", error);
-    }
+    } catch (error) {}
   };
 
   const handleIgnoreRide = () => {

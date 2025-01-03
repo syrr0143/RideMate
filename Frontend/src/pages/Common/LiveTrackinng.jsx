@@ -25,7 +25,6 @@ export default function LiveTracking() {
   const handleLocationUpdate = ({ latitude, longitude }) => {
     // Handle location updates if needed
   };
-  console.log("checkingn destination position:", destinationCoords, rideData);
 
   const handleNotCompleted = () => {
     setIsRideFinish(false);
@@ -35,7 +34,6 @@ export default function LiveTracking() {
     // Listen to the socket event when ride is completed
     if (socket) {
       socket.on("ride-completed", (message) => {
-        console.log(message);
         navigate("/user/home/make-payment");
       });
     }
@@ -58,10 +56,9 @@ export default function LiveTracking() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("this is response", response);
+
       navigate(`/${userRole}/home`);
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }

@@ -13,10 +13,9 @@ const DriverAssigned = () => {
   const driverDetails = location.state?.CaptainAssigned;
   const rideDetails = location.state?.ride;
   const otp = location.state?.otp;
-  console.log("rideDetails is ", location.state);
+
   useEffect(() => {
     socket.on("otp-success", (ride) => {
-      console.log("otp-success", ride);
       navigate("/user/live-track", {
         state: {
           CaptainAssigned: ride?.captain,

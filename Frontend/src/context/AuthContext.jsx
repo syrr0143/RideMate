@@ -26,9 +26,7 @@ function AuthProvider({ children }) {
         const currentTime = Date.now() / 1000; // Current time in seconds
 
         if (decoded.exp && decoded.exp < currentTime) {
-          console.log("Token has expired, refreshing...");
           const response = await generateNewTokenForUser(token);
-          console.log("response is ", response);
 
           if (response?.token) {
             const newToken = response.token;

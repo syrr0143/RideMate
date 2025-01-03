@@ -31,12 +31,10 @@ const CaptainSignup = () => {
     setApiError("");
     try {
       if (validateForm()) {
-        console.log("formData", formData);
         const res = await captainSignUp(formData);
         navigate("/captain-login", { replace: true });
       }
     } catch (error) {
-      console.log("error", error);
       setApiError(error.response.data.message);
     } finally {
       setLoading(false);

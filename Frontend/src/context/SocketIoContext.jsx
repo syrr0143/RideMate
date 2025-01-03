@@ -6,12 +6,8 @@ const socketContext = createContext();
 const socket = io(`${socketUrl}`);
 const SocketProvider = ({ children }) => {
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected to server sockcet");
-    });
-    socket.on("disconnect", () => {
-      console.log("disconnected to server");
-    });
+    socket.on("connect", () => {});
+    socket.on("disconnect", () => {});
     // return () => {
     //   socket.disconnect();
     // };

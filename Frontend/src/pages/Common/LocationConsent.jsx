@@ -6,13 +6,11 @@ import { requestLocationAccess } from "../../utils/locationAccess.js";
 const LocationConsent = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e) => {
-    console.log("clicked");
     e.preventDefault();
     setLoading(true);
     try {
       requestLocationAccess();
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }

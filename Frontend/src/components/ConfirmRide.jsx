@@ -46,12 +46,11 @@ const ConfirmRide = () => {
       );
       const fetchedOtp = response?.data.ride.otp; // Fetch OTP from response
       setOtp(fetchedOtp); // Store OTP in state
-      console.log("otp is ", fetchedOtp, response);
+
       if (response.data.sucess === true) {
         setwaitingForDriver(true);
       }
     } catch (error) {
-      console.error("Error fetching fare details:", error);
     } finally {
       setLoading(false);
     }
@@ -63,7 +62,6 @@ const ConfirmRide = () => {
 
   useEffect(() => {
     socket.on("ride-confirmed", (ride) => {
-      console.log("ride confirmed", ride);
       setCaptainAssigned(ride?.captain);
       setwaitingForDriver(false);
       navigate("/user/home/driver-assigned", {

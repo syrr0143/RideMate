@@ -28,13 +28,12 @@ const UserLogin = () => {
       if (validateForm()) {
         const res = await userLogin(formData);
         const token = res.data.user.token;
-        console.log("login user is ", res.data.user.role);
+
         handleLogin(token);
         navigate("/user/home", { replace: true });
       }
     } catch (error) {
       setApiError(error.response?.data.message);
-      console.log("some error", error);
     } finally {
       setLoading(false);
     }

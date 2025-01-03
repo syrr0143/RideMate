@@ -24,7 +24,6 @@ const UserSignup = () => {
       }
     } catch (error) {
       setApiError(error.response?.data.message);
-      console.log("some error ", error);
     } finally {
       setLoading(false);
     }

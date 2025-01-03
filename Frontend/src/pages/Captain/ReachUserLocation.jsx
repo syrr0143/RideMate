@@ -21,7 +21,6 @@ export default function ReachUserLocation() {
   const [isConfirmRideOpen, setIsConfirmRideOpen] = useState(false);
   const rideData = location?.state?.rideData;
 
-  console.log(rideData);
   const { userRole } = useAuth();
   const [isRideFinish, setIsRideFinish] = useState(false);
 
@@ -42,9 +41,7 @@ export default function ReachUserLocation() {
       navigate("/captain/live-track", {
         state: { rideData, destinationCoords: rideData?.destinationCoords },
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleCancelRide = () => {

@@ -22,10 +22,10 @@ const ChoseVehicle = () => {
       source,
       destination,
     };
-    console.log(vehicle);
+
     navigate("/user/home/confirm-ride", { state: { vehicle } }); // Pass `vehicle` correctly in state
   };
-  console.log("estimatedTravelTime", eta);
+
   return (
     <div className="mt-2 ml-2 mr-2">
       <p className="font-bold text-2xl mb-4">Choose a vehicle</p>

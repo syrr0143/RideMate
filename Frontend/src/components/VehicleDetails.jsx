@@ -16,7 +16,7 @@ const VehicleDetails = ({
     auto: "/LandingPage/auto.jpeg",
     bike: "/LandingPage/bike.jpeg",
   };
-  console.log("estimatedTravelTime", estimatedTravelTime);
+
   return (
     <div
       onClick={onClick}

@@ -53,7 +53,7 @@ const FindTrip = () => {
           },
         }
       );
-      console.log(response);
+
       setLocationSuggestion(response.data || []);
     } catch (error) {
       console.error("Error fetching location suggestions:", error.message);
@@ -82,7 +82,7 @@ const FindTrip = () => {
           },
         }
       );
-      console.log("fare response is ", response);
+
       const fareDetails = response.data.fares;
       navigate("chose-vehicle", {
         state: { ...tripData, fareDetails, eta: response?.data.eta },

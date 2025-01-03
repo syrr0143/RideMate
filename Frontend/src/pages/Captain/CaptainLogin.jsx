@@ -32,7 +32,6 @@ const CaptainLogin = () => {
       }
     } catch (error) {
       setApiError(error.response.data.message);
-      console.log("error", error);
     } finally {
       setLoading(false);
     }

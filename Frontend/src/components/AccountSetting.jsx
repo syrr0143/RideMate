@@ -23,16 +23,13 @@ const AccountSettings = () => {
     try {
       if (userRole === "user") {
         const response = await logoutUser(token);
-        console.log(response);
       }
       if (userRole === "captain") {
         const response = await logoutCaptain(token);
-        console.log(response);
       }
       handleLogout();
       navigate("https://ride-mate-five.vercel.app", { replace: true });
     } catch (error) {
-      console.log("error", error);
     } finally {
       setLoading(false);
     }

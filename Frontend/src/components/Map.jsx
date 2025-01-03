@@ -10,7 +10,6 @@ import useAuth from "../hooks/useAuth";
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
 const Map = React.memo(({ onLocationUpdate, destinationCoords }) => {
-  console.log("re rendering the map");
   const { userRole } = useAuth();
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -35,13 +34,12 @@ const Map = React.memo(({ onLocationUpdate, destinationCoords }) => {
 
   const getRoute = async (start, end) => {
     try {
-      console.log("start and end is ", start, end);
       const query = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?alternatives=true&steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
       );
       const json = await query.json();
       const data = json.routes[0];
-      console.log("route is", data);
+
       return data;
     } catch (err) {
       console.error("Error fetching route:", err);

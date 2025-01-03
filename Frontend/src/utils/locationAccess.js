@@ -9,8 +9,7 @@ export const requestLocationAccess = () => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude } = position.coords;
-      console.log("Location access granted:");
-      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+     
     },
     (error) => {
       if (error.code === error.PERMISSION_DENIED) {

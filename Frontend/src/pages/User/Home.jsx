@@ -54,7 +54,6 @@ const Home = () => {
   }
   const handleLocationUpdate = ({ latitude, longitude }) => {
     // Handle location updates if needed
-    console.log("Current position:", latitude, longitude);
   };
   return (
     <>
