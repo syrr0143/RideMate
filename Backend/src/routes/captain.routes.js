@@ -16,6 +16,8 @@ import {
   signUpInputValidation,
 } from "../middleware/inputValidatorMiddleware/captainInput.js";
 import { authenticate } from "../middleware/captain.middleware.js";
+import { cacheControl } from "../middleware/CacheControl.middleware.js";
+
 const router = express.Router();
 
 router.post("/signup", signUpInputValidation, signUpCaptain);
