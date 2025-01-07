@@ -20,11 +20,46 @@ const router = express.Router();
 
 router.post("/signup", signUpInputValidation, signUpCaptain);
 router.post("/login", loginInputValidation, loginCaptain);
-router.get("/profile", authenticate, captainProfile);
+router.get(
+  "/profile",
+  authenticate,
+  cacheControl({
+    maxAge: 60,
+  }),
+  captainProfile
+);
 router.post("/logout", authenticate, logOutCaptain);
-router.post("/confirm-ride", authenticate, confirmRideByCaptain);
-router.get("/available-rides", authenticate, getAllRideAvailable);
-router.post("/confirm-otp", authenticate, confirmRideByOtp);
-router.post("/finish-ride", authenticate, finishRide);
+router.post(
+  "/confirm-ride",
+  authenticate,
+  cacheControl({
+    maxAge: 60,
+  }),
+  confirmRideByCaptain
+);
+router.get(
+  "/available-rides",
+  authenticate,
+  cacheControl({
+    maxAge: 60,
+  }),
+  getAllRideAvailable
+);
+router.post(
+  "/confirm-otp",
+  authenticate,
+  cacheControl({
+    maxAge: 60,
+  }),
+  confirmRideByOtp
+);
+router.post(
+  "/finish-ride",
+  authenticate,
+  cacheControl({
+    maxAge: 60,
+  }),
+  finishRide
+);
 
 export default router;
